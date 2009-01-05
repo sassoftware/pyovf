@@ -32,15 +32,17 @@ class DiskFormat(AbstractDiskFormat):
 class pDisk(object):
 
     _xobj = xobj.XObjMetadata(
-            attributes = { 'ovf_diskId' : xobj.XIDREF,
+            attributes = { 'ovf_diskId' : str,
+                           'ovf_fileRef' : xobj.XIDREF,
                            'ovf_capacity' : long,
                            'ovf_populatedSize' : long,
                            'ovf_format' : DiskFormat } )
 
 class Disk(pDisk):
 
-    def __init__(self, disk, capacity, format, populatedSize):
-        self.ovf_diskId = disk
+    def __init__(self, diskId, fileObj, capacity, format, populatedSize):
+        self.ovf_diskId = diskId
+        self.ovf_fileRef = fileObj
         self.ovf_capacity = capacity
         self.ovf_populatedSize = populatedSize
         self.ovf_format = format
@@ -87,8 +89,8 @@ class Ovf(object):
     ovf_VirtualSystem = [ VirtualSystem ]
 
     def addDisk(self, d):
-        if d.ovf_diskId not in self.ovf_References.ovf_File:
-            self.addFileReference(d.ovf_diskId)
+        if d.ovf_fileRef not in self.ovf_References.ovf_File:
+            self.addFileReference(d.ovf_fileRef)
         self.ovf_DiskSection.ovf_Disk.append(d)
 
     def addFileReference(self, r):
