@@ -4,11 +4,9 @@ import os
 class pDisk(object):
 
     _xobj = xobj.XObjMetadata(
-            attributes =  [ 'ovf_diskId', 'ovf_capacity', 'ovf_populatedSize' ])
-
-    ovf_diskId = xobj.XIDREF
-    ovf_capacity = long
-    ovf_populatedSize = long
+            attributes = { 'ovf_diskId' : xobj.XIDREF,
+                           'ovf_capacity' : long,
+                           'ovf_populatedSize' : long } )
 
 class Disk(pDisk):
 
@@ -21,8 +19,9 @@ class Disk(pDisk):
 class pFileReference(object):
 
     _xobj = xobj.XObjMetadata(
-            attributes = [ "ovf_id", "ovf_href", "ovf_size " ])
-    ovf_size = int
+            attributes = { "ovf_id" : str,
+                           "ovf_href" : str,
+                           "ovf_size " : long } )
 
 class FileReference(pFileReference):
 
