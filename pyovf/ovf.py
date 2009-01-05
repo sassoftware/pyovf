@@ -1,12 +1,41 @@
 from xobj import xobj
 import os
 
+class AbstractDiskFormat(object):
+
+    def __init__(self, compressed = False):
+        assert(self.format)
+        self.compressed = compressed
+
+class DiskFormatVmdk(AbstractDiskFormat):
+
+    format = "http://www.vmware.com/specifications/vmdk.html"
+
+class DiskFormat(AbstractDiskFormat):
+
+    def __init__(self, s, compressed = False):
+        if s.endswith('#compressed'):
+            # we shouldn't parse this and get it passed in
+            assert(not compressed)
+            compressed = True
+            s = s[:-11]
+
+        self.format = s
+        AbstractDiskFormat.__init__(self, compressed)
+
+    def __str__(self):
+        if self.compressed:
+            return self.format + "#compressed"
+
+        return self.format
+
 class pDisk(object):
 
     _xobj = xobj.XObjMetadata(
             attributes = { 'ovf_diskId' : xobj.XIDREF,
                            'ovf_capacity' : long,
-                           'ovf_populatedSize' : long } )
+                           'ovf_populatedSize' : long,
+                           'ovf_format' : DiskFormat } )
 
 class Disk(pDisk):
 
