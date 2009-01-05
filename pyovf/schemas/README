@@ -1,0 +1,50 @@
+pyovf users, please note that the contens of this directory (including
+everything below this notice) were borrowed from the open-ovf project.
+------------------------------------------------------------------------------
+
+Schemas
+
+Introduction
+------------
+The contents of this directory are provided for the convenience of library
+users and distributed in accordance with the,
+
+Distribute Management Task Force, Inc. (DMTF) - http://www.dmtf.org/
+World Wide Web Consortium, (W3C)              - http://www.w3.org/
+
+
+Copyright Notice
+----------------
+All documents contained in schemas/ are thereby copyrighted such,
+
+Copyright © 2008 Distributed Management Task Force, Inc. (DMTF). All rights reserved.
+	- cim-rasd.xsd
+	- cim-vssd.xsd
+	- common.xsd
+	- ovf-envelope.xsd
+	- ovf-environment.xsd
+
+Copyright © 1997-2007 W3C® (MIT, ERCIM, Keio), All Rights Reserved. W3C liability,
+trademark, document use and software licensing rules apply.
+	- xml.xsd
+
+Modifications
+-------------
+Additionally, modifications have been made the original files, as follows:
+
+
+In CIM_ResourceAllocationSettingData.xsd and CIM_VirtualSystemSettingData.xsd
+files, there were three definitions of
+
+	<xs:restriction base="cim:cimAnySimpleType">
+
+libxml2 failed to parse the schemas with these lines, however they did parse after
+modifying them to:
+
+	<xs:restriction base="xs:anyType">
+
+--- modify ovf-envelope.xsd for local xml.xsd schema ---
+change
+    <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="http://www.w3.org/2001/xml.xsd"/>
+to
+    <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="xml.xsd"/>
