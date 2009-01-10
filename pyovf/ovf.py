@@ -65,6 +65,9 @@ class DiskSection(object):
 
     ovf_Disk = [ pDisk ]
 
+    def __init__(self):
+        self.ovf_Disk = []
+
 class NetworkSection(object):
 
     ovf_Network = [ object ]
@@ -80,6 +83,9 @@ class VirtualSystem(object):
 class ReferencesSection(object):
 
     ovf_File = [ pFileReference ]
+
+    def __init__(self):
+        self.ovf_File = []
 
 class Ovf(object):
 
@@ -100,6 +106,16 @@ class Ovf(object):
         schemaPath = os.path.join(os.path.dirname(__file__),
                                   "schemas/ovf-envelope.xsd")
         return self._doc.toxml()
+
+class NewOvf(Ovf):
+
+    def __init__(self):
+        doc = OvfDocument()
+        doc.ovf_Envelope = self
+        doc.ovf_Envelope._doc = doc
+
+        self.ovf_References = ReferencesSection()
+        self.ovf_DiskSection = DiskSection()
 
 class OvfDocument(xobj.Document):
 
