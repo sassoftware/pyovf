@@ -1,6 +1,21 @@
 from xobj import xobj
 import os
 
+class OvfObject(object):
+
+    def __init__(self, **kwargs):
+        for key, val in self.__class__.__dict__.iteritems():
+            if type(val) == list:
+                setattr(self, key, [])
+
+        for key, val in kwargs.iteritems():
+            ovfKey = 'ovf_' + key
+            if (hasattr(self.__class__, ovfKey) or
+                (hasattr(self, '_xobj') and ovfKey in (self._xobj.attributes))):
+                setattr(self, ovfKey, val)
+            else:
+                raise TypeError, 'unknown constructor parameter %s' % key
+
 class AbstractDiskFormat(object):
 
     def __init__(self, compressed = False):
@@ -29,7 +44,7 @@ class DiskFormat(AbstractDiskFormat):
 
         return self.format
 
-class pDisk(object):
+class Disk(OvfObject):
 
     _xobj = xobj.XObjMetadata(
             attributes = { 'ovf_diskId' : str,
@@ -38,117 +53,60 @@ class pDisk(object):
                            'ovf_populatedSize' : long,
                            'ovf_format' : DiskFormat } )
 
-class Disk(pDisk):
-
-    def __init__(self, diskId, fileObj, capacity, format, populatedSize):
-        self.ovf_diskId = diskId
-        self.ovf_fileRef = fileObj
-        self.ovf_capacity = capacity
-        self.ovf_populatedSize = populatedSize
-        self.ovf_format = format
-
-class pFileReference(object):
+class FileReference(OvfObject):
 
     _xobj = xobj.XObjMetadata(
             attributes = { "ovf_id" : str,
                            "ovf_href" : str,
-                           "ovf_size " : long } )
-
-class FileReference(pFileReference):
-
-    def __init__(self, id, href, size):
-        self.ovf_id = id
-        self.ovf_href = href
-        self.ovf_size = size
+                           "ovf_size" : long } )
 
 class DiskSection(object):
 
-    ovf_Disk = [ pDisk ]
+    ovf_Disk = [ Disk ]
 
-    def __init__(self):
-        self.ovf_Disk = []
-
-class Network(object):
+class Network(OvfObject):
 
     _xobj = xobj.XObjMetadata(
             attributes = { "ovf_id" : str,
                            "ovf_name" : xobj.XID } )
 
-    def __init__(self, id, name):
-        self.ovf_id = id
-        self.ovf_name = name
-        if name is not None:
-            self.ovf_name = name
-
 class NetworkSection(object):
 
     ovf_Network = [ object ]
 
-    def __init__(self):
-        self.ovf_Network = []
-
-class pProperty(object):
-
-    pass
-
-class Property(pProperty):
+class Property(OvfObject):
 
     _xobj = xobj.XObjMetadata(attributes = { 'ovf_key' : str,
                                              'ovf_type' : str } )
 
-    def __init__(self, key, type):
-        self.ovf_key = key
-        self.ovf_type = type
-
-class pProduct(object):
+class Product(OvfObject):
 
     ovf_info = str
     ovf_productVersion = str
-    ovf_Property = [ pProperty ]
-
-class Product(pProduct):
+    ovf_Property = [ Property ]
 
     def addProperty(self, p):
         self.ovf_Property.append(p)
 
-    def __init__(self, info, version = None):
-        self.ovf_Property = []
-        self.ovf_info = info
-        if version:
-            self.ovf_productVersion = version
-
 class ProductSection(object):
 
-    ovf_Product = [ pProduct ]
+    ovf_Product = [ Product ]
 
-    def __init__(self):
-        self.ovf_Product = []
-
-class pVirtualSystem(object):
+class VirtualSystem(OvfObject):
 
     _xobj = xobj.XObjMetadata(attributes = { 'ovf_id' : str,
                                              'ovf_info' : str } )
 
     ovf_ProductSection = [ ProductSection ]
 
-class VirtualSystem(object):
-
     def addProduct(self, p):
         self.ovf_ProductSection.append(p)
 
-    def __init__(self, id, info):
-        self.ovf_ProductSection = []
-        self.ovf_id = id
-        self.ovf_info = info
-
 class ReferencesSection(object):
 
-    ovf_File = [ pFileReference ]
+    ovf_File = [ FileReference ]
 
-    def __init__(self):
-        self.ovf_File = []
-
-class Ovf(object):
+class Ovf(OvfObject):
 
     ovf_References = ReferencesSection
     ovf_DiskSection = DiskSection
