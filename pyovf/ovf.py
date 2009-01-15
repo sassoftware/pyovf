@@ -18,6 +18,12 @@ class OvfObject(object):
 
 class AbstractDiskFormat(object):
 
+    def __str__(self):
+        if self.compressed:
+            return self.format + "#compressed"
+
+        return self.format
+
     def __init__(self, compressed = False):
         assert(self.format)
         self.compressed = compressed
@@ -47,22 +53,34 @@ class DiskFormat(AbstractDiskFormat):
 class Disk(OvfObject):
 
     _xobj = xobj.XObjMetadata(
-            attributes = { 'ovf_diskId' : str,
-                           'ovf_fileRef' : xobj.XIDREF,
+            attributes = {
                            'ovf_capacity' : long,
+                           'ovf_capacityAllocationUnits' : long,
+                           'ovf_diskId' : str,
+                           'ovf_fileRef' : xobj.XIDREF,
+                           'ovf_format' : DiskFormat,
+                           'ovf_parentRef' : str,
                            'ovf_populatedSize' : long,
-                           'ovf_format' : DiskFormat } )
+                         } )
 
 class FileReference(OvfObject):
 
     _xobj = xobj.XObjMetadata(
-            attributes = { "ovf_id" : str,
+            attributes = {
+                           "ovf_chunkSize" : long,
+                           "ovf_compression" : str,
                            "ovf_href" : str,
-                           "ovf_size" : long } )
+                           "ovf_id" : str,
+                           "ovf_size" : long,
+                         } )
 
-class DiskSection(object):
+class DiskSection(OvfObject):
+
+    _xobj = xobj.XObjMetadata(
+            elements = [ 'ovf_Info', 'ovf_Disk' ])
 
     ovf_Disk = [ Disk ]
+    ovf_Info = str
 
 class Network(OvfObject):
 
@@ -70,7 +88,7 @@ class Network(OvfObject):
             attributes = { "ovf_id" : str,
                            "ovf_name" : xobj.XID } )
 
-class NetworkSection(object):
+class NetworkSection(OvfObject):
 
     ovf_Network = [ object ]
 
@@ -88,7 +106,7 @@ class Product(OvfObject):
     def addProperty(self, p):
         self.ovf_Property.append(p)
 
-class ProductSection(object):
+class ProductSection(OvfObject):
 
     ovf_Product = [ Product ]
 
@@ -102,11 +120,14 @@ class VirtualSystem(OvfObject):
     def addProduct(self, p):
         self.ovf_ProductSection.append(p)
 
-class ReferencesSection(object):
+class ReferencesSection(OvfObject):
 
     ovf_File = [ FileReference ]
 
 class Ovf(OvfObject):
+
+    _xobj = xobj.XObjMetadata(
+            elements = [ 'ovf_References', 'ovf_DiskSection' ] )
 
     ovf_References = ReferencesSection
     ovf_DiskSection = DiskSection
