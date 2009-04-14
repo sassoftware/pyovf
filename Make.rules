@@ -95,4 +95,4 @@ testutils-clean:
 	rm -Rf .coverage .times annotate
 
 testutils-test:
-	PYOVF_PATH=$(TOPDIR)/../ XOBJ_PATH=$(XOBJ_PATH) $(PYTHON) testsuite.py -v --coverage
+	PYOVF_PATH=$(TOPDIR)/ XOBJ_PATH=$(XOBJ_PATH) $(PYTHON) testsuite.py -v --coverage
