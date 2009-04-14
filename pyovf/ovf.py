@@ -9,12 +9,22 @@ class OvfObject(object):
                 setattr(self, key, [])
 
         for key, val in kwargs.iteritems():
-            ovfKey = 'ovf_' + key
+            # ovfKey = 'ovf_' + key
+            ovfKey = key
             if (hasattr(self.__class__, ovfKey) or
                 (hasattr(self, '_xobj') and ovfKey in (self._xobj.attributes))):
                 setattr(self, ovfKey, val)
             else:
                 raise TypeError, 'unknown constructor parameter %s' % key
+
+def OvfFile(f):
+    schemaPath = os.path.join(os.path.dirname(__file__),
+                              "schemas/ovf-envelope.xsd")
+    doc = xobj.parsef(f, documentClass = OvfDocument,
+                      schemaf = open(schemaPath))
+    ovf = doc.Envelope
+    ovf._doc = doc
+    return ovf
 
 class AbstractDiskFormat(object):
 
@@ -54,129 +64,124 @@ class Disk(OvfObject):
 
     _xobj = xobj.XObjMetadata(
             attributes = {
-                           'ovf_capacity' : long,
-                           'ovf_capacityAllocationUnits' : long,
-                           'ovf_diskId' : str,
-                           'ovf_fileRef' : xobj.XIDREF,
-                           'ovf_format' : DiskFormat,
-                           'ovf_parentRef' : str,
-                           'ovf_populatedSize' : long,
+                           'capacity' : long,
+                           'capacityAllocationUnits' : long,
+                           'diskId' : str,
+                           'fileRef' : xobj.XIDREF,
+                           'format' : DiskFormat,
+                           'parentRef' : str,
+                           'populatedSize' : long,
                          } )
 
 class FileReference(OvfObject):
 
     _xobj = xobj.XObjMetadata(
             attributes = {
-                           "ovf_chunkSize" : long,
-                           "ovf_compression" : str,
-                           "ovf_href" : str,
-                           "ovf_id" : str,
-                           "ovf_size" : long,
+                           "chunkSize" : long,
+                           "compression" : str,
+                           "href" : str,
+                           "id" : str,
+                           "size" : long,
                          } )
 
 class DiskSection(OvfObject):
 
     _xobj = xobj.XObjMetadata(
-            elements = [ 'ovf_Info', 'ovf_Disk' ])
+            elements = [ 'Info', 'Disk' ])
 
-    ovf_Disk = [ Disk ]
-    ovf_Info = str
+    Disk = [ Disk ]
+    Info = str
 
 class Network(OvfObject):
 
     _xobj = xobj.XObjMetadata(
-            attributes = { "ovf_id" : str,
-                           "ovf_name" : xobj.XID } )
+            attributes = { "id" : str,
+                           "name" : xobj.XID } )
 
 class NetworkSection(OvfObject):
 
-    ovf_Network = [ object ]
+    Network = [ object ]
 
 class Property(OvfObject):
 
-    _xobj = xobj.XObjMetadata(attributes = { 'ovf_key' : str,
-                                             'ovf_type' : str } )
+    _xobj = xobj.XObjMetadata(attributes = { 'key' : str,
+                                             'type' : str } )
 
 class Product(OvfObject):
 
-    ovf_info = str
-    ovf_productVersion = str
-    ovf_Property = [ Property ]
+    info = str
+    productVersion = str
+    Property = [ Property ]
 
     def addProperty(self, p):
-        self.ovf_Property.append(p)
+        self.Property.append(p)
 
 class ProductSection(OvfObject):
 
-    ovf_Product = [ Product ]
+    Product = [ Product ]
 
 class VirtualSystem(OvfObject):
 
-    _xobj = xobj.XObjMetadata(attributes = { 'ovf_id' : str,
-                                             'ovf_info' : str } )
+    _xobj = xobj.XObjMetadata(attributes = { 'id' : str,
+                                             'info' : str } )
 
-    ovf_ProductSection = [ ProductSection ]
+    ProductSection = [ ProductSection ]
 
     def addProduct(self, p):
-        self.ovf_ProductSection.append(p)
+        self.ProductSection.append(p)
 
 class ReferencesSection(OvfObject):
 
-    ovf_File = [ FileReference ]
+    File = [ FileReference ]
 
 class Ovf(OvfObject):
 
     _xobj = xobj.XObjMetadata(
-            elements = [ 'ovf_References', 'ovf_DiskSection' ] )
+            elements = [ 'References', 'DiskSection' ] )
 
-    ovf_References = ReferencesSection
-    ovf_DiskSection = DiskSection
-    ovf_NetworkSection = NetworkSection
-    ovf_VirtualSystem = [ { 'VirtualSystem' : VirtualSystem,
+    References = ReferencesSection
+    DiskSection = DiskSection
+    NetworkSection = NetworkSection
+    VirtualSystem = [ { 'VirtualSystem' : VirtualSystem,
                             'VirtualSystemCollection' : object } ]
 
     def addDisk(self, d):
-        if d.ovf_fileRef not in self.ovf_References.ovf_File:
-            self.addFileReference(d.ovf_fileRef)
-        self.ovf_DiskSection.ovf_Disk.append(d)
+        if d.fileRef not in self.References.File:
+            self.addFileReference(d.fileRef)
+        self.DiskSection.Disk.append(d)
 
     def addNetwork(self, n):
-        self.ovf_NetworkSection.ovf_Network.append(n)
+        self.NetworkSection.Network.append(n)
 
     def addFileReference(self, r):
-        self.ovf_References.ovf_File.append(r)
+        self.References.File.append(r)
 
     def addSystem(self, vs):
-        self.ovf_VirtualSystem.append(vs)
+        self.VirtualSystem.append(vs)
 
     def toxml(self):
         schemaPath = os.path.join(os.path.dirname(__file__),
                                   "schemas/ovf-envelope.xsd")
         return self._doc.toxml(nsmap = self._doc.nameSpaceMap)
 
-class NewOvf(Ovf):
-
-    def __init__(self):
-        doc = OvfDocument()
-        doc.ovf_Envelope = self
-        doc.ovf_Envelope._doc = doc
-
-        self.ovf_References = ReferencesSection()
-        self.ovf_DiskSection = DiskSection()
-        self.ovf_NetworkSection = NetworkSection()
-        self.ovf_VirtualSystem = []
-
 class OvfDocument(xobj.Document):
 
     nameSpaceMap = { 'ovf' : 'http://schemas.dmtf.org/ovf/envelope/1',
                      None : 'http://schemas.dmtf.org/ovf/envelope/1' }
-    ovf_Envelope = Ovf
+    Envelope = Ovf
 
-def OvfFile(f):
-    schemaPath = os.path.join(os.path.dirname(__file__),
-                              "schemas/ovf-envelope.xsd")
-    doc = xobj.parsef(f, documentClass = OvfDocument,
-                      schemaf = open(schemaPath))
-    ovf = doc.ovf_Envelope
-    ovf._doc = doc
-    return ovf
+class NewOvf(Ovf):
+    """
+    Class factory to yield a new Ovf object.
+    """
+    def __init__(self):
+        doc = OvfDocument()
+        doc.Envelope = self
+
+        self._doc = doc
+
+        self.References = ReferencesSection()
+        self.DiskSection = DiskSection()
+        self.NetworkSection = NetworkSection()
+        self.VirtualSystem = []
+
