@@ -10,7 +10,7 @@
 # or fitness for a particular purpose. See the MIT License for full details.
 #
 
-SUBDIRS = pyovf
+SUBDIRS = pyovf test
 
 
 build: default-build
