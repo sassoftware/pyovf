@@ -11,23 +11,34 @@ from pyovf import ovf
 from xobj import xobj
 from StringIO import StringIO
 
-from testpyovfxml import *
+from pyovftestxml import *
 
 class TestCase(testhelp.TestCase):
     pass
 
 class PyOvfTest(TestCase):
 
-    fileId = 'testFile'
-    networkId = 'testNetwork'
+    fileId = 'testFileId'
+    fileHref = 'testFileHref'
+    networkId = 'testNetworkId'
+    networkName = 'testNetworkName'
+    capacity = 'testCapacity'
+    diskId = 'testDiskId'
+    diskSectionInfo = 'testDiskSectionInfo'
+    networkSectionInfo = 'testNetworkSectionInfo'
+    virtualSystemId = 'testVirtualSystemId'
+    productInfo = 'testProductInfo'
 
     def setUp(self):
         self.ovf = ovf.NewOvf()
+        self.ovf.ovf_DiskSection.ovf_Info = self.diskSectionInfo
+        self.ovf.ovf_NetworkSection.ovf_Info = self.networkSectionInfo
         TestCase.setUp(self)
 
     def addFileReference(self, id):
         f = ovf.FileReference()
-        f.id = id
+        f.ovf_id = id
+        f.ovf_href = self.fileHref
         self.ovf.addFileReference(f)
         return f
 
@@ -42,22 +53,27 @@ class PyOvfTest(TestCase):
 
     def addSystem(self):
         p = ovf.Product()
+        p.ovf_Info = self.productInfo
         s = ovf.VirtualSystem()
         s.addProduct(p)
+        s.ovf_id = self.virtualSystemId
         self.ovf.addSystem(s)
         return s
 
-    def addSystemProperty(self, system, key):
-        system.ProductSection[0].addProperty(key)
+    def addSystemProperty(self, system, key, type):
+        p = ovf.Property()
+        p.ovf_key = key
+        p.ovf_type = type
+        system.ovf_ProductSection[0].addProperty(p)
 
     def addNetwork(self):
-        n = ovf.Network(id=self.networkId)
+        n = ovf.Network(ovf_id=self.networkId)
+        n.ovf_name = self.networkName
         self.ovf.addNetwork(n)
         return n
 
     def testNewOvfXml(self):
-        new = ovf.NewOvf()
-        xml = new.toxml()
+        xml = self.ovf.toxml()
         self.assertEquals(xml, newXml)
        
     def testAddFileReference(self):
@@ -65,35 +81,25 @@ class PyOvfTest(TestCase):
         xml = self.ovf.toxml()
         self.assertEquals(xml, fileXml)
 
-    def testAddDisk(self):
-        fr = ovf.FileReference()
-        fr.id = 'testFile0'
-        self.addDisk(fileRef=fr)
-        xml = self.ovf.toxml()
-        self.assertEquals(xml, diskXmlNoRef)
-
-        file = self.addFileReference(self.fileId)
-        self.addDisk(fileRef=file)
-        xml = self.ovf.toxml()
-        self.assertEquals(xml, diskXml)
-
     def testAddDiskWithFormat(self):
         file = self.addFileReference(self.fileId)
         df = ovf.DiskFormat('http://example.com/format.html')
-        self.addDisk(fileRef=file, format=df)
+        self.addDisk(ovf_diskId=self.diskId, ovf_fileRef=file, 
+            ovf_format=df, ovf_capacity=self.capacity)
         xml = self.ovf.toxml()
         self.assertEquals(xml, diskWithFormatXml)
 
     def testAddDiskWithCompressedFormat(self):
         file = self.addFileReference(self.fileId)
         df = ovf.DiskFormat('http://example.com/format.html#compressed')
-        self.addDisk(fileRef=file, format=df)
+        self.addDisk(ovf_diskId=self.diskId, ovf_fileRef=file, 
+            ovf_format=df, ovf_capacity=self.capacity)
         xml = self.ovf.toxml()
         self.assertEquals(xml, diskWithCompressedFormatXml)
 
     def testAbstractDiskFormat(self):
         class FakeDiskFormat(ovf.AbstractDiskFormat):
-            format = 'http://example.com/format.html'
+            ovf_format = 'http://example.com/format.html'
 
         fdf = FakeDiskFormat(compressed=True)
         self.assertEquals(str(fdf),
@@ -105,7 +111,7 @@ class PyOvfTest(TestCase):
 
     def testSystemProperty(self):
         s = self.addSystem()
-        self.addSystemProperty(s, 'propertyKey')
+        self.addSystemProperty(s, 'propertyKey', 'string')
         xml = self.ovf.toxml()
         self.assertEquals(xml, systemPropertyXml)
         
