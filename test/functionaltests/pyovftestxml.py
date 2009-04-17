@@ -1,6 +1,6 @@
 
 newXml = """<?xml version='1.0' encoding='UTF-8'?>
-<ovf:Envelope xmlns:ovf="http://schemas.dmtf.org/ovf/envelope/1" xmlns="http://schemas.dmtf.org/ovf/envelope/1">
+<ovf:Envelope xmlns:ovf="http://schemas.dmtf.org/ovf/envelope/1">
   <ovf:References/>
   <ovf:DiskSection>
     <ovf:Info>testDiskSectionInfo</ovf:Info>
@@ -12,7 +12,7 @@ newXml = """<?xml version='1.0' encoding='UTF-8'?>
 """
 
 fileXml = """<?xml version='1.0' encoding='UTF-8'?>
-<ovf:Envelope xmlns:ovf="http://schemas.dmtf.org/ovf/envelope/1" xmlns="http://schemas.dmtf.org/ovf/envelope/1">
+<ovf:Envelope xmlns:ovf="http://schemas.dmtf.org/ovf/envelope/1">
   <ovf:References>
     <ovf:File ovf:href="testFileHref" ovf:id="testFileId"/>
   </ovf:References>
@@ -26,7 +26,7 @@ fileXml = """<?xml version='1.0' encoding='UTF-8'?>
 """
 
 diskWithFormatXml = """<?xml version='1.0' encoding='UTF-8'?>
-<ovf:Envelope xmlns:ovf="http://schemas.dmtf.org/ovf/envelope/1" xmlns="http://schemas.dmtf.org/ovf/envelope/1">
+<ovf:Envelope xmlns:ovf="http://schemas.dmtf.org/ovf/envelope/1">
   <ovf:References>
     <ovf:File ovf:href="testFileHref" ovf:id="testFileId"/>
   </ovf:References>
@@ -41,7 +41,7 @@ diskWithFormatXml = """<?xml version='1.0' encoding='UTF-8'?>
 """
 
 diskWithCompressedFormatXml = """<?xml version='1.0' encoding='UTF-8'?>
-<ovf:Envelope xmlns:ovf="http://schemas.dmtf.org/ovf/envelope/1" xmlns="http://schemas.dmtf.org/ovf/envelope/1">
+<ovf:Envelope xmlns:ovf="http://schemas.dmtf.org/ovf/envelope/1">
   <ovf:References>
     <ovf:File ovf:href="testFileHref" ovf:id="testFileId"/>
   </ovf:References>
@@ -56,7 +56,7 @@ diskWithCompressedFormatXml = """<?xml version='1.0' encoding='UTF-8'?>
 """
 
 systemPropertyXml = """<?xml version='1.0' encoding='UTF-8'?>
-<ovf:Envelope xmlns:ovf="http://schemas.dmtf.org/ovf/envelope/1" xmlns="http://schemas.dmtf.org/ovf/envelope/1">
+<ovf:Envelope xmlns:ovf="http://schemas.dmtf.org/ovf/envelope/1">
   <ovf:References/>
   <ovf:DiskSection>
     <ovf:Info>testDiskSectionInfo</ovf:Info>
@@ -74,7 +74,7 @@ systemPropertyXml = """<?xml version='1.0' encoding='UTF-8'?>
 """
 
 networkXml = """<?xml version='1.0' encoding='UTF-8'?>
-<ovf:Envelope xmlns:ovf="http://schemas.dmtf.org/ovf/envelope/1" xmlns="http://schemas.dmtf.org/ovf/envelope/1">
+<ovf:Envelope xmlns:ovf="http://schemas.dmtf.org/ovf/envelope/1">
   <ovf:References/>
   <ovf:DiskSection>
     <ovf:Info>testDiskSectionInfo</ovf:Info>

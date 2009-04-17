@@ -176,8 +176,8 @@ class Ovf(OvfObject):
 
 class OvfDocument(xobj.Document):
 
-    nameSpaceMap = { 'ovf' : 'http://schemas.dmtf.org/ovf/envelope/1',
-                     None : 'http://schemas.dmtf.org/ovf/envelope/1' }
+    nameSpaceMap = { 'ovf' : 'http://schemas.dmtf.org/ovf/envelope/1'}
+                     # None : 'http://schemas.dmtf.org/ovf/envelope/1' }
     schemaFile = os.path.join(os.path.dirname(__file__),
                               "schemas/ovf-envelope.xsd")
     ovf_Envelope = Ovf
@@ -186,7 +186,7 @@ class OvfDocument(xobj.Document):
         schemaObj = etree.XMLSchema(file = self.schemaFile)
         # self.__explicitNamespaces = True
         xobj.Document.__init__(self, schema=schemaObj)
-        self.__xmlNsMap = self.nameSpaceMap
+        # self.__xmlNsMap = self.nameSpaceMap
 
 class NewOvf(Ovf):
     """
