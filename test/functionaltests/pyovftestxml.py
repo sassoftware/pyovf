@@ -85,3 +85,23 @@ networkXml = """<?xml version='1.0' encoding='UTF-8'?>
   </ovf:NetworkSection>
 </ovf:Envelope>
 """
+
+ovfFileXml = """<?xml version='1.0' encoding='UTF-8'?>
+<ovf:Envelope xmlns:ovf="http://schemas.dmtf.org/ovf/envelope/1">
+  <ovf:References/>
+  <ovf:DiskSection>
+    <ovf:Info>testDiskSectionInfo</ovf:Info>
+  </ovf:DiskSection>
+  <ovf:NetworkSection>
+    <ovf:Info>testNetworkSectionInfo</ovf:Info>
+  </ovf:NetworkSection>
+  <ovf:VirtualSystem ovf:id="testVirtualSystemId">
+    <ovf:ProductSection>
+      <ovf:Info>testProductInfo</ovf:Info>
+      <ovf:Property ovf:key="propertyKey" ovf:type="string"/>
+    </ovf:ProductSection>
+  </ovf:VirtualSystem>
+</ovf:Envelope>
+"""
+
+

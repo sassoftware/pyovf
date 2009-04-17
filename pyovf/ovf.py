@@ -1,9 +1,12 @@
+#!/usr/bin/python
+
 from lxml import etree
 
 from xobj import xobj
-import os
 
 class OvfObject(object):
+
+    prefix = 'ovf_'
 
     def __init__(self, **kwargs):
         for key, val in self.__class__.__dict__.iteritems():
@@ -12,21 +15,23 @@ class OvfObject(object):
 
         for key, val in kwargs.iteritems():
             ovfKey = 'ovf_' + key
-            ovfKey = key
             if (hasattr(self.__class__, ovfKey) or
                 (hasattr(self, '_xobj') and ovfKey in (self._xobj.attributes))):
                 setattr(self, ovfKey, val)
             else:
                 raise TypeError, 'unknown constructor parameter %s' % key
 
-def OvfFile(f):
-    schemaPath = os.path.join(os.path.dirname(__file__),
-                              "schemas/ovf-envelope.xsd")
-    doc = xobj.parsef(f, documentClass = OvfDocument,
-                      schemaf = open(schemaPath))
-    ovf = doc.Envelope
-    ovf._doc = doc
-    return ovf
+    def __setattr__(self, name, value):
+        if not name.startswith('_') and not name.startswith(self.prefix):
+            name = self.prefix + name
+
+        object.__setattr__(self, name, value)            
+        
+    def __getattr__(self, name):        
+        if not name.startswith('_') and not name.startswith(self.prefix):
+            name = self.prefix + name
+
+        object.__getattribute__(self, name)            
 
 class AbstractDiskFormat(object):
 
@@ -170,36 +175,3 @@ class Ovf(OvfObject):
 
     def toxml(self):
         return self._doc.toxml(nsmap = self._doc.nameSpaceMap)
-        # schemaFile = os.path.join(os.path.dirname(__file__),
-                                  # "schemas/ovf-envelope.xsd")
-        # return xobj.toxml(self, 'ovf_Envelope', schemaf = schemaFile)
-
-class OvfDocument(xobj.Document):
-
-    nameSpaceMap = { 'ovf' : 'http://schemas.dmtf.org/ovf/envelope/1'}
-                     # None : 'http://schemas.dmtf.org/ovf/envelope/1' }
-    schemaFile = os.path.join(os.path.dirname(__file__),
-                              "schemas/ovf-envelope.xsd")
-    ovf_Envelope = Ovf
-
-    def __init__(self):
-        schemaObj = etree.XMLSchema(file = self.schemaFile)
-        # self.__explicitNamespaces = True
-        xobj.Document.__init__(self, schema=schemaObj)
-        # self.__xmlNsMap = self.nameSpaceMap
-
-class NewOvf(Ovf):
-    """
-    Class factory to yield a new Ovf object.
-    """
-    def __init__(self):
-        doc = OvfDocument()
-        doc.ovf_Envelope = self
-
-        self._doc = doc
-
-        self.ovf_References = ReferencesSection()
-        self.ovf_DiskSection = DiskSection()
-        self.ovf_NetworkSection = NetworkSection()
-        self.ovf_VirtualSystem = []
-

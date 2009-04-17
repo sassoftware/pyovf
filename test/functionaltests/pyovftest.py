@@ -1,16 +1,16 @@
 
 import os
 import types
+from lxml import etree
+from StringIO import StringIO
 
 import testsuite
 testsuite.setup()
 from testrunner import testhelp
-from lxml import etree
 
 from pyovf import ovf
+from pyovf import helper
 from xobj import xobj
-from StringIO import StringIO
-
 from pyovftestxml import *
 
 class TestCase(testhelp.TestCase):
@@ -30,7 +30,7 @@ class PyOvfTest(TestCase):
     productInfo = 'testProductInfo'
 
     def setUp(self):
-        self.ovf = ovf.NewOvf()
+        self.ovf = helper.NewOvf()
         self.ovf.ovf_DiskSection.ovf_Info = self.diskSectionInfo
         self.ovf.ovf_NetworkSection.ovf_Info = self.networkSectionInfo
         TestCase.setUp(self)
@@ -67,7 +67,7 @@ class PyOvfTest(TestCase):
         system.ovf_ProductSection[0].addProperty(p)
 
     def addNetwork(self):
-        n = ovf.Network(ovf_id=self.networkId)
+        n = ovf.Network(id=self.networkId)
         n.ovf_name = self.networkName
         self.ovf.addNetwork(n)
         return n
@@ -119,3 +119,7 @@ class PyOvfTest(TestCase):
         n = self.addNetwork()
         xml = self.ovf.toxml()
         self.assertEquals(xml, networkXml)
+
+    def testOvfFile(self):
+        s = StringIO(ovfFileXml)
+        ovfObj = helper.OvfFile(s)
