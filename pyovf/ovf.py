@@ -31,7 +31,7 @@ class OvfObject(object):
         if not name.startswith('_') and not name.startswith(self.prefix):
             name = self.prefix + name
 
-        object.__getattribute__(self, name)            
+        return object.__getattribute__(self, name)            
 
 class AbstractDiskFormat(object):
 
@@ -111,7 +111,7 @@ class NetworkSection(OvfObject):
             elements = [ 'ovf_Info', 'ovf_Network' ])
 
     ovf_Info = str            
-    ovf_Network = [ object ]
+    ovf_Network = [ Network ]
 
 class Property(OvfObject):
 

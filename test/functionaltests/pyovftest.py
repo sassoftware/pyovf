@@ -89,6 +89,14 @@ class PyOvfTest(TestCase):
         xml = self.ovf.toxml()
         self.assertEquals(xml, diskWithFormatXml)
 
+        file2 = ovf.FileReference()
+        file2.ovf_id = 'testFileId2'
+        file2.ovf_href = self.fileHref
+        self.addDisk(ovf_diskId=self.diskId, ovf_fileRef=file2, 
+            ovf_format=df, ovf_capacity=self.capacity)
+        xml = self.ovf.toxml()
+        self.assertEquals(xml, diskWithFormatXml2)
+
     def testAddDiskWithCompressedFormat(self):
         file = self.addFileReference(self.fileId)
         df = ovf.DiskFormat('http://example.com/format.html#compressed')
@@ -123,3 +131,18 @@ class PyOvfTest(TestCase):
     def testOvfFile(self):
         s = StringIO(ovfFileXml)
         ovfObj = helper.OvfFile(s)
+        self.assertEquals(ovfObj.DiskSection.Info,
+            self.diskSectionInfo)
+        self.assertEquals(ovfObj.NetworkSection.Info,
+            self.networkSectionInfo)
+        self.assertEquals(ovfObj.NetworkSection.Network[0].id,
+            self.networkId)
+        self.assertEquals(ovfObj.NetworkSection.Network[0].name,
+            self.networkName)
+
+    def testUnknownConstructor(self):
+        self.assertRaises(TypeError, ovf.Network, foo='foo')
+
+    def testPrefixSetAttr(self):
+        self.ovf.NetworkSection.Network = []
+        self.assertTrue(hasattr(self.ovf.NetworkSection, 'ovf_Network'))

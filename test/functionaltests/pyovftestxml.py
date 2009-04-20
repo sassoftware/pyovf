@@ -40,6 +40,23 @@ diskWithFormatXml = """<?xml version='1.0' encoding='UTF-8'?>
 </ovf:Envelope>
 """
 
+diskWithFormatXml2 = """<?xml version='1.0' encoding='UTF-8'?>
+<ovf:Envelope xmlns:ovf="http://schemas.dmtf.org/ovf/envelope/1">
+  <ovf:References>
+    <ovf:File ovf:href="testFileHref" ovf:id="testFileId"/>
+    <ovf:File ovf:href="testFileHref" ovf:id="testFileId2"/>
+  </ovf:References>
+  <ovf:DiskSection>
+    <ovf:Info>testDiskSectionInfo</ovf:Info>
+    <ovf:Disk ovf:diskId="testDiskId" ovf:capacity="testCapacity" ovf:fileRef="testFileId" ovf:format="http://example.com/format.html"/>
+    <ovf:Disk ovf:diskId="testDiskId" ovf:capacity="testCapacity" ovf:fileRef="testFileId2" ovf:format="http://example.com/format.html"/>
+  </ovf:DiskSection>
+  <ovf:NetworkSection>
+    <ovf:Info>testNetworkSectionInfo</ovf:Info>
+  </ovf:NetworkSection>
+</ovf:Envelope>
+"""
+
 diskWithCompressedFormatXml = """<?xml version='1.0' encoding='UTF-8'?>
 <ovf:Envelope xmlns:ovf="http://schemas.dmtf.org/ovf/envelope/1">
   <ovf:References>
@@ -94,6 +111,7 @@ ovfFileXml = """<?xml version='1.0' encoding='UTF-8'?>
   </ovf:DiskSection>
   <ovf:NetworkSection>
     <ovf:Info>testNetworkSectionInfo</ovf:Info>
+    <ovf:Network ovf:id="testNetworkId" ovf:name="testNetworkName"/>
   </ovf:NetworkSection>
   <ovf:VirtualSystem ovf:id="testVirtualSystemId">
     <ovf:ProductSection>
