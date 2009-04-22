@@ -16,6 +16,7 @@ class OvfDocument(xobj.Document):
 
     def __init__(self, *args, **kwargs):
         schemaObj = etree.XMLSchema(file = self.schemaFile)
+        kwargs['schema'] = schemaObj
         xobj.Document.__init__(self, *args, **kwargs)
 
 class NewOvf(ovf.Ovf):
