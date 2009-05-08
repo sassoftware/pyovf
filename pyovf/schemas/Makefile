@@ -12,8 +12,7 @@
 
 SCHEMADIR=/schemas
 
-schema_files = ovf-environment.xsd \
-		   	   ovf-envelope.xsd
+schema_files = $(wildcard *.xsd)
 
 override PYDEST = /pyovf
 
