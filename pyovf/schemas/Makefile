@@ -10,22 +10,23 @@
 # or fitness for a particular purpose. See the MIT License for full details.
 #
 
-python_files = $(wildcard *.py)
+SCHEMADIR=/schemas
 
-SUBDIRS = schemas
+schema_files = ovf-environment.xsd \
+		   	   ovf-envelope.xsd
 
 override PYDEST = /pyovf
 
+build: default-build
 
-build: default-build python-build
+install: default-install
+	mkdir -p $(DESTDIR)$(pydir)$(PYDEST)$(SCHEMADIR)
+	install -m0644 $(schema_files) "$(DESTDIR)$(pydir)$(PYDEST)$(SCHEMADIR)/"
 
-install: default-install python-install
+clean: default-clean
 
-clean: default-clean python-clean
+test: default-test
 
-test: default-test python-test
-
-
-export TOPDIR=$(shell pwd)/..
+export TOPDIR=$(shell pwd)/../..
 include $(TOPDIR)/Make.rules
 include $(TOPDIR)/Make.defs
