@@ -11,7 +11,7 @@
 #
 
 python_files = $(wildcard *.py)
-override PYDEST = /xobj
+override PYDEST = /pyovf
 
 
 build: default-build python-build
