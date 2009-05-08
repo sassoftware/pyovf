@@ -57,7 +57,7 @@ class PyOvfTest(TestCase):
         s = ovf.VirtualSystem()
         s.addProduct(p)
         s.ovf_id = self.virtualSystemId
-        self.ovf.addSystem(s)
+        self.ovf.addVirtualSystem(s)
         return s
 
     def addSystemProperty(self, system, key, type):
@@ -146,3 +146,28 @@ class PyOvfTest(TestCase):
     def testPrefixSetAttr(self):
         self.ovf.NetworkSection.Network = []
         self.assertTrue(hasattr(self.ovf.NetworkSection, 'ovf_Network'))
+
+    def testNew(self):
+        newOvf = helper.NewOvf()
+        newOvf.NetworkSection.Info = 'network section info'
+        newOvf.DiskSection.Info = 'disk section info'
+
+        fr = ovf.FileReference()
+        fr.id = 'file1'
+        fr.href = 'file'
+        newOvf.addFileReference(fr)
+
+        vs = ovf.VirtualSystem()
+        vs.id = 'newId'
+        vs.info = 'newInfo'
+        newOvf.addVirtualSystem(vs)
+
+        d = ovf.Disk()
+        df = ovf.DiskFormat('http://www.vmware.com/interfaces/specifications/vmdk.html#sparse')
+        d.diskId = 'vmdisk1'
+        d.fileRef = fr
+        d.format = df
+        d.capacity = 0
+        newOvf.addDisk(d)
+
+        xml = newOvf.toxml()

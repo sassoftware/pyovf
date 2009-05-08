@@ -170,7 +170,7 @@ class Ovf(OvfObject):
     def addFileReference(self, r):
         self.ovf_References.ovf_File.append(r)
 
-    def addSystem(self, vs):
+    def addVirtualSystem(self, vs):
         self.ovf_VirtualSystem.append(vs)
 
     def toxml(self):
