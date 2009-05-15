@@ -4,10 +4,7 @@ from lxml import etree
 
 from xobj import xobj
 
-class OvfObject(object):
-
-    prefix = 'ovf_'
-
+class AbstractOvfObject(object):
     def __init__(self, **kwargs):
         for key, val in self.__class__.__dict__.iteritems():
             if type(val) == list:
@@ -32,6 +29,13 @@ class OvfObject(object):
             name = self.prefix + name
 
         return object.__getattribute__(self, name)            
+
+
+class RasdObject(AbstractOvfObject):
+    prefix = 'rasd_'
+
+class OvfObject(AbstractOvfObject):
+    prefix = 'ovf_'
 
 class AbstractDiskFormat(object):
 
@@ -134,15 +138,46 @@ class ProductSection(OvfObject):
 
     ovf_Product = [ Product ]
 
+class Item(RasdObject):
+    pass
+
+class VirtualHardwareSection(OvfObject):
+
+    _xobj = xobj.XObjMetadata(
+            elements = [ 'ovf_Info', 'ovf_Item' ])
+
+    ovf_Info = str
+    ovf_Item = [ Item ]
+
+    def addItem(self, item):
+        self.ovf_Item.append(item)
+
 class VirtualSystem(OvfObject):
 
-    _xobj = xobj.XObjMetadata(attributes = { 'ovf_id' : str,
-                                             'ovf_info' : str } )
+    _xobj = xobj.XObjMetadata(
+            attributes = { 'ovf_id' : str, 'ovf_info' : str },
+            elements = [ 'ovf_VirtualHardwareSection', ] )
 
     ovf_ProductSection = [ ProductSection ]
+    ovf_VirtualHardwareSection = [ VirtualHardwareSection ] 
 
     def addProduct(self, p):
         self.ovf_ProductSection.append(p)
+
+    def addVirtualHardwareSection(self, vhws):
+        self.ovf_VirtualHardwareSection.append(vhws)
+
+class VirtualSystemCollection(OvfObject):
+    
+    _xobj = xobj.XObjMetadata(
+            elements = [ 'ovf_Info', 'ovf_VirtualSystem' ],
+            attributes = { 'ovf_id' : str})
+
+    ovf_Info = str
+    ovf_VirtualSystem = [ VirtualSystem ]
+
+    def addVirtualSystem(self, vs):
+        self.ovf_VirtualSystem.append(vs)
 
 class ReferencesSection(OvfObject):
 
@@ -151,13 +186,13 @@ class ReferencesSection(OvfObject):
 class Ovf(OvfObject):
 
     _xobj = xobj.XObjMetadata(
-            elements = [ 'ovf_References', 'ovf_DiskSection' ] )
+            elements = [ 'ovf_References', 'ovf_DiskSection',
+                         'ovf_NetworkSection', 'ovf_VirtualSystemCollection' ] )
 
     ovf_References = ReferencesSection
     ovf_DiskSection = DiskSection
     ovf_NetworkSection = NetworkSection
-    ovf_VirtualSystem = [ { 'ovf_VirtualSystem' : VirtualSystem,
-                            'ovf_VirtualSystemCollection' : object } ]
+    ovf_VirtualSystemCollection = VirtualSystemCollection
 
     def addDisk(self, d):
         if d.ovf_fileRef not in self.ovf_References.ovf_File:
@@ -171,7 +206,7 @@ class Ovf(OvfObject):
         self.ovf_References.ovf_File.append(r)
 
     def addVirtualSystem(self, vs):
-        self.ovf_VirtualSystem.append(vs)
+        self.ovf_VirtualSystemCollection.ovf_VirtualSystem.append(vs)
 
     def toxml(self):
         return self._doc.toxml(nsmap = self._doc.nameSpaceMap)
