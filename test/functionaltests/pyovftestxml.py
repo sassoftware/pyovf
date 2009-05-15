@@ -8,6 +8,7 @@ newXml = """<?xml version='1.0' encoding='UTF-8'?>
   <ovf:NetworkSection>
     <ovf:Info>testNetworkSectionInfo</ovf:Info>
   </ovf:NetworkSection>
+  <ovf:VirtualSystemCollection ovf:id="testVirtualSystemCollectionId"/>
 </ovf:Envelope>
 """
 
@@ -22,6 +23,7 @@ fileXml = """<?xml version='1.0' encoding='UTF-8'?>
   <ovf:NetworkSection>
     <ovf:Info>testNetworkSectionInfo</ovf:Info>
   </ovf:NetworkSection>
+  <ovf:VirtualSystemCollection ovf:id="testVirtualSystemCollectionId"/>
 </ovf:Envelope>
 """
 
@@ -37,6 +39,7 @@ diskWithFormatXml = """<?xml version='1.0' encoding='UTF-8'?>
   <ovf:NetworkSection>
     <ovf:Info>testNetworkSectionInfo</ovf:Info>
   </ovf:NetworkSection>
+  <ovf:VirtualSystemCollection ovf:id="testVirtualSystemCollectionId"/>
 </ovf:Envelope>
 """
 
@@ -54,6 +57,7 @@ diskWithFormatXml2 = """<?xml version='1.0' encoding='UTF-8'?>
   <ovf:NetworkSection>
     <ovf:Info>testNetworkSectionInfo</ovf:Info>
   </ovf:NetworkSection>
+  <ovf:VirtualSystemCollection ovf:id="testVirtualSystemCollectionId"/>
 </ovf:Envelope>
 """
 
@@ -69,6 +73,7 @@ diskWithCompressedFormatXml = """<?xml version='1.0' encoding='UTF-8'?>
   <ovf:NetworkSection>
     <ovf:Info>testNetworkSectionInfo</ovf:Info>
   </ovf:NetworkSection>
+  <ovf:VirtualSystemCollection ovf:id="testVirtualSystemCollectionId"/>
 </ovf:Envelope>
 """
 
@@ -81,12 +86,14 @@ systemPropertyXml = """<?xml version='1.0' encoding='UTF-8'?>
   <ovf:NetworkSection>
     <ovf:Info>testNetworkSectionInfo</ovf:Info>
   </ovf:NetworkSection>
-  <ovf:VirtualSystem ovf:id="testVirtualSystemId">
-    <ovf:ProductSection>
-      <ovf:Info>testProductInfo</ovf:Info>
-      <ovf:Property ovf:key="propertyKey" ovf:type="string"/>
-    </ovf:ProductSection>
-  </ovf:VirtualSystem>
+  <ovf:VirtualSystemCollection ovf:id="testVirtualSystemCollectionId">
+    <ovf:VirtualSystem ovf:id="testVirtualSystemId">
+      <ovf:ProductSection>
+        <ovf:Info>testProductInfo</ovf:Info>
+        <ovf:Property ovf:key="propertyKey" ovf:type="string"/>
+      </ovf:ProductSection>
+    </ovf:VirtualSystem>
+  </ovf:VirtualSystemCollection>
 </ovf:Envelope>
 """
 
@@ -100,6 +107,7 @@ networkXml = """<?xml version='1.0' encoding='UTF-8'?>
     <ovf:Info>testNetworkSectionInfo</ovf:Info>
     <ovf:Network ovf:id="testNetworkId" ovf:name="testNetworkName"/>
   </ovf:NetworkSection>
+  <ovf:VirtualSystemCollection ovf:id="testVirtualSystemCollectionId"/>
 </ovf:Envelope>
 """
 
@@ -113,12 +121,14 @@ ovfFileXml = """<?xml version='1.0' encoding='UTF-8'?>
     <ovf:Info>testNetworkSectionInfo</ovf:Info>
     <ovf:Network ovf:id="testNetworkId" ovf:name="testNetworkName"/>
   </ovf:NetworkSection>
-  <ovf:VirtualSystem ovf:id="testVirtualSystemId">
-    <ovf:ProductSection>
-      <ovf:Info>testProductInfo</ovf:Info>
-      <ovf:Property ovf:key="propertyKey" ovf:type="string"/>
-    </ovf:ProductSection>
-  </ovf:VirtualSystem>
+  <ovf:VirtualSystemCollection ovf:id="testVirtualSystemCollectionId">
+    <ovf:VirtualSystem ovf:id="testVirtualSystemId">
+      <ovf:ProductSection>
+        <ovf:Info>testProductInfo</ovf:Info>
+        <ovf:Property ovf:key="propertyKey" ovf:type="string"/>
+      </ovf:ProductSection>
+    </ovf:VirtualSystem>
+  </ovf:VirtualSystemCollection>
 </ovf:Envelope>
 """
 

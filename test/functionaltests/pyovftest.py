@@ -28,11 +28,15 @@ class PyOvfTest(TestCase):
     networkSectionInfo = 'testNetworkSectionInfo'
     virtualSystemId = 'testVirtualSystemId'
     productInfo = 'testProductInfo'
+    virtualSystemCollectionId = 'testVirtualSystemCollectionId'
+    virtualHardwareSectionInfo = 'testVirtualHardwareSectionInfo'
 
     def setUp(self):
         self.ovf = helper.NewOvf()
         self.ovf.ovf_DiskSection.ovf_Info = self.diskSectionInfo
         self.ovf.ovf_NetworkSection.ovf_Info = self.networkSectionInfo
+        self.ovf.ovf_VirtualSystemCollection.ovf_id = \
+            self.virtualSystemCollectionId
         TestCase.setUp(self)
 
     def addFileReference(self, id):
@@ -151,15 +155,25 @@ class PyOvfTest(TestCase):
         newOvf = helper.NewOvf()
         newOvf.NetworkSection.Info = 'network section info'
         newOvf.DiskSection.Info = 'disk section info'
+        newOvf.VirtualSystemCollection.id = self.virtualSystemCollectionId
 
         fr = ovf.FileReference()
         fr.id = 'file1'
         fr.href = 'file'
         newOvf.addFileReference(fr)
 
+        vhws = ovf.VirtualHardwareSection()
+        vhws.Info = self.virtualHardwareSectionInfo
+        cpu = ovf.Item()
+        cpu.Caption = '1 CPU'
+        memory = ovf.Item()
+        vhws.addItem(cpu)
+        vhws.addItem(memory)
+
         vs = ovf.VirtualSystem()
         vs.id = 'newId'
         vs.info = 'newInfo'
+        vs.addVirtualHardwareSection(vhws)
         newOvf.addVirtualSystem(vs)
 
         d = ovf.Disk()
