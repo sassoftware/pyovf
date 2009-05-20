@@ -1,6 +1,6 @@
 
 newXml = """<?xml version='1.0' encoding='UTF-8'?>
-<ovf:Envelope xmlns:ovf="http://schemas.dmtf.org/ovf/envelope/1">
+<ovf:Envelope xmlns:rasd="http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_ResourceAllocationSettingData" xmlns:ovf="http://schemas.dmtf.org/ovf/envelope/1">
   <ovf:References/>
   <ovf:DiskSection>
     <ovf:Info>testDiskSectionInfo</ovf:Info>
@@ -13,7 +13,7 @@ newXml = """<?xml version='1.0' encoding='UTF-8'?>
 """
 
 fileXml = """<?xml version='1.0' encoding='UTF-8'?>
-<ovf:Envelope xmlns:ovf="http://schemas.dmtf.org/ovf/envelope/1">
+<ovf:Envelope xmlns:rasd="http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_ResourceAllocationSettingData" xmlns:ovf="http://schemas.dmtf.org/ovf/envelope/1">
   <ovf:References>
     <ovf:File ovf:href="testFileHref" ovf:id="testFileId"/>
   </ovf:References>
@@ -28,7 +28,7 @@ fileXml = """<?xml version='1.0' encoding='UTF-8'?>
 """
 
 diskWithFormatXml = """<?xml version='1.0' encoding='UTF-8'?>
-<ovf:Envelope xmlns:ovf="http://schemas.dmtf.org/ovf/envelope/1">
+<ovf:Envelope xmlns:rasd="http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_ResourceAllocationSettingData" xmlns:ovf="http://schemas.dmtf.org/ovf/envelope/1">
   <ovf:References>
     <ovf:File ovf:href="testFileHref" ovf:id="testFileId"/>
   </ovf:References>
@@ -44,7 +44,7 @@ diskWithFormatXml = """<?xml version='1.0' encoding='UTF-8'?>
 """
 
 diskWithFormatXml2 = """<?xml version='1.0' encoding='UTF-8'?>
-<ovf:Envelope xmlns:ovf="http://schemas.dmtf.org/ovf/envelope/1">
+<ovf:Envelope xmlns:rasd="http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_ResourceAllocationSettingData" xmlns:ovf="http://schemas.dmtf.org/ovf/envelope/1">
   <ovf:References>
     <ovf:File ovf:href="testFileHref" ovf:id="testFileId"/>
     <ovf:File ovf:href="testFileHref" ovf:id="testFileId2"/>
@@ -62,7 +62,7 @@ diskWithFormatXml2 = """<?xml version='1.0' encoding='UTF-8'?>
 """
 
 diskWithCompressedFormatXml = """<?xml version='1.0' encoding='UTF-8'?>
-<ovf:Envelope xmlns:ovf="http://schemas.dmtf.org/ovf/envelope/1">
+<ovf:Envelope xmlns:rasd="http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_ResourceAllocationSettingData" xmlns:ovf="http://schemas.dmtf.org/ovf/envelope/1">
   <ovf:References>
     <ovf:File ovf:href="testFileHref" ovf:id="testFileId"/>
   </ovf:References>
@@ -78,7 +78,7 @@ diskWithCompressedFormatXml = """<?xml version='1.0' encoding='UTF-8'?>
 """
 
 systemPropertyXml = """<?xml version='1.0' encoding='UTF-8'?>
-<ovf:Envelope xmlns:ovf="http://schemas.dmtf.org/ovf/envelope/1">
+<ovf:Envelope xmlns:rasd="http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_ResourceAllocationSettingData" xmlns:ovf="http://schemas.dmtf.org/ovf/envelope/1">
   <ovf:References/>
   <ovf:DiskSection>
     <ovf:Info>testDiskSectionInfo</ovf:Info>
@@ -98,7 +98,7 @@ systemPropertyXml = """<?xml version='1.0' encoding='UTF-8'?>
 """
 
 networkXml = """<?xml version='1.0' encoding='UTF-8'?>
-<ovf:Envelope xmlns:ovf="http://schemas.dmtf.org/ovf/envelope/1">
+<ovf:Envelope xmlns:rasd="http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_ResourceAllocationSettingData" xmlns:ovf="http://schemas.dmtf.org/ovf/envelope/1">
   <ovf:References/>
   <ovf:DiskSection>
     <ovf:Info>testDiskSectionInfo</ovf:Info>
@@ -112,7 +112,7 @@ networkXml = """<?xml version='1.0' encoding='UTF-8'?>
 """
 
 ovfFileXml = """<?xml version='1.0' encoding='UTF-8'?>
-<ovf:Envelope xmlns:ovf="http://schemas.dmtf.org/ovf/envelope/1">
+<ovf:Envelope xmlns:rasd="http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_ResourceAllocationSettingData" xmlns:ovf="http://schemas.dmtf.org/ovf/envelope/1">
   <ovf:References/>
   <ovf:DiskSection>
     <ovf:Info>testDiskSectionInfo</ovf:Info>
@@ -132,4 +132,42 @@ ovfFileXml = """<?xml version='1.0' encoding='UTF-8'?>
 </ovf:Envelope>
 """
 
-
+newXml2 = """\
+<?xml version='1.0' encoding='UTF-8'?>
+<ovf:Envelope xmlns:rasd="http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_ResourceAllocationSettingData" xmlns:ovf="http://schemas.dmtf.org/ovf/envelope/1">
+  <ovf:References>
+    <ovf:File ovf:href="file" ovf:id="file1"/>
+  </ovf:References>
+  <ovf:DiskSection>
+    <ovf:Info>disk section info</ovf:Info>
+    <ovf:Disk ovf:diskId="vmdisk1" ovf:capacity="0" ovf:fileRef="file1" ovf:format="http://www.vmware.com/interfaces/specifications/vmdk.html#sparse"/>
+  </ovf:DiskSection>
+  <ovf:NetworkSection>
+    <ovf:Info>network section info</ovf:Info>
+  </ovf:NetworkSection>
+  <ovf:VirtualSystemCollection ovf:id="testVirtualSystemCollectionId">
+    <ovf:VirtualSystem ovf:info="newInfo" ovf:id="newId">
+      <ovf:VirtualHardwareSection>
+        <ovf:Info>testVirtualHardwareSectionInfo</ovf:Info>
+        <ovf:Item>
+          <rasd:Caption>Virtual CPU</rasd:Caption>
+          <rasd:Description>Number of virtual CPUs</rasd:Description>
+          <rasd:ElementName>some virt cpu</rasd:ElementName>
+          <rasd:InstanceID>1</rasd:InstanceID>
+          <rasd:ResourceType>3</rasd:ResourceType>
+          <rasd:VirtualQuantity>1</rasd:VirtualQuantity>
+        </ovf:Item>
+        <ovf:Item>
+          <rasd:AllocationUnits>MegaBytes</rasd:AllocationUnits>
+          <rasd:Caption>256 MB of memory</rasd:Caption>
+          <rasd:Description>Memory Size</rasd:Description>
+          <rasd:ElementName>some mem size</rasd:ElementName>
+          <rasd:InstanceID>2</rasd:InstanceID>
+          <rasd:ResourceType>4</rasd:ResourceType>
+          <rasd:VirtualQuantity>256</rasd:VirtualQuantity>
+        </ovf:Item>
+      </ovf:VirtualHardwareSection>
+    </ovf:VirtualSystem>
+  </ovf:VirtualSystemCollection>
+</ovf:Envelope>
+"""

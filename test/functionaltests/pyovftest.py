@@ -10,6 +10,7 @@ from testrunner import testhelp
 
 from pyovf import ovf
 from pyovf import helper
+from pyovf import item
 from xobj import xobj
 from pyovftestxml import *
 
@@ -164,9 +165,9 @@ class PyOvfTest(TestCase):
 
         vhws = ovf.VirtualHardwareSection()
         vhws.Info = self.virtualHardwareSectionInfo
-        cpu = ovf.Item()
-        cpu.Caption = '1 CPU'
-        memory = ovf.Item()
+        cpu = item.Cpu()
+        memory = item.Memory()
+
         vhws.addItem(cpu)
         vhws.addItem(memory)
 
@@ -185,3 +186,5 @@ class PyOvfTest(TestCase):
         newOvf.addDisk(d)
 
         xml = newOvf.toxml()
+
+        self.assertEquals(xml, newXml2)

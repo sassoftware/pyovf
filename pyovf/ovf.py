@@ -1,17 +1,21 @@
 #!/usr/bin/python
 
 from lxml import etree
-
 from xobj import xobj
 
 class AbstractOvfObject(object):
+    prefix = ''
+
     def __init__(self, **kwargs):
         for key, val in self.__class__.__dict__.iteritems():
             if type(val) == list:
                 setattr(self, key, [])
+            elif type(val) == str:
+                setattr(self, key, val)
+                
 
         for key, val in kwargs.iteritems():
-            ovfKey = 'ovf_' + key
+            ovfKey = self.prefix + key
             if (hasattr(self.__class__, ovfKey) or
                 (hasattr(self, '_xobj') and ovfKey in (self._xobj.attributes))):
                 setattr(self, ovfKey, val)
@@ -30,12 +34,14 @@ class AbstractOvfObject(object):
 
         return object.__getattribute__(self, name)            
 
-
 class RasdObject(AbstractOvfObject):
     prefix = 'rasd_'
 
 class OvfObject(AbstractOvfObject):
     prefix = 'ovf_'
+
+class Item(RasdObject):
+    pass
 
 class AbstractDiskFormat(object):
 
@@ -137,9 +143,6 @@ class Product(OvfObject):
 class ProductSection(OvfObject):
 
     ovf_Product = [ Product ]
-
-class Item(RasdObject):
-    pass
 
 class VirtualHardwareSection(OvfObject):
 
