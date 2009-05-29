@@ -9,8 +9,10 @@ from xobj import xobj
 class OvfDocument(xobj.Document):
 
     nameSpaceMap = { 'ovf' : 'http://schemas.dmtf.org/ovf/envelope/1',
-                     'rasd' : 'http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_ResourceAllocationSettingData'}
-                     # None : 'http://schemas.dmtf.org/ovf/envelope/1' }
+                     'rasd' : 'http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_ResourceAllocationSettingData',
+                     'vssd' : 'http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_VirtualSystemSettingData',
+                     'cim' : 'http://schemas.dmtf.org/wbem/wscim/1/common',
+                   }
     schemaFile = os.path.join(os.path.dirname(__file__),
                               "schemas/ovf-envelope.xsd")
     ovf_Envelope = ovf.Ovf
@@ -39,6 +41,8 @@ class NewOvf(ovf.Ovf):
         self.ovf_ResourceAllocationSection.ovf_Info = \
             'Resource Allocation Section Info'
         self.ovf_VirtualSystemCollection = ovf.VirtualSystemCollection()
+        self.ovf_VirtualSystemCollection.ovf_Info = \
+            'Virtual System Collection Info'
 
         network = ovf.Network(name='Network Name')
         network.ovf_Description = 'Network Description'

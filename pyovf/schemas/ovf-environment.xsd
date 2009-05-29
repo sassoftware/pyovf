@@ -1,14 +1,14 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <!--
     Notice 
     DSP8027
-    Document: OVF XML Schema Specification, ovf-environment.xsd
-    Version: 1.0.0d
-    Status: Preliminary Standard
-    Date: 08/14/2008
+    Document: OVF XML Schema Specification for OVF environment
+    Version: 1.0.0
+    Status: Standard
+    Date: 01/15/2009
     Description: XML schema specification for Open Virtualization Format.
     
-    Copyright © 2008 Distributed Management Task Force, Inc. (DMTF). All rights reserved. DMTF is a not-for-profit association of industry members dedicated to promoting enterprise and systems management and interoperability. Members and non-members may reproduce DMTF specifications and documents for uses consistent with this purpose, provided that correct attribution is given. As DMTF specifications may be revised from time to time, the particular version and release date should always be noted. Implementation of certain elements of this standard or proposed standard may be subject to third party patent rights, including provisional patent rights (herein "patent rights"). DMTF makes no representations to users of the standard as to the existence of such rights, and is not responsible to recognize, disclose, or identify any or all such third party patent right, owners or claimants, nor for any incomplete or inaccurate identification or disclosure of such rights, owners or claimants. DMTF shall have no liability to any party, in any manner or circumstance, under any legal theory whatsoever, for failure to recognize, disclose, or identify any such third party patent rights, or for such party’s reliance on the standard or incorporation thereof in its product, protocols or testing procedures. DMTF shall have no liability to any party implementing such standard, whether such implementation is foreseeable or not, nor to any patent owner or claimant, and shall have no liability or responsibility for costs or losses incurred if a standard is withdrawn or modified after publication, and shall be indemnified and held harmless by any party implementing the standard from any and all claims of infringement by a patent owner for such implementations. For information about patents held by third-parties which have notified the DMTF that, in their opinion, such patent may relate to or impact implementations of DMTF standards, visit http://www.dmtf.org/about/policies/disclosures.php.
+    Copyright © 2009 Distributed Management Task Force, Inc. (DMTF). All rights reserved. DMTF is a not-for-profit association of industry members dedicated to promoting enterprise and systems management and interoperability. Members and non-members may reproduce DMTF specifications and documents provided that correct attribution is given. As DMTF specifications may be revised from time to time, the particular version and release date should always be noted. Implementation of certain elements of this standard or proposed standard may be subject to third party patent rights, including provisional patent rights (herein "patent rights"). DMTF makes no representations to users of the standard as to the existence of such rights, and is not responsible to recognize, disclose, or identify any or all such third party patent right, owners or claimants, nor for any incomplete or inaccurate identification or disclosure of such rights, owners or claimants. DMTF shall have no liability to any party, in any manner or circumstance, under any legal theory whatsoever, for failure to recognize, disclose, or identify any such third party patent rights, or for such party’s reliance on the standard or incorporation thereof in its product, protocols or testing procedures. DMTF shall have no liability to any party implementing such standard, whether such implementation is foreseeable or not, nor to any patent owner or claimant, and shall have no liability or responsibility for costs or losses incurred if a standard is withdrawn or modified after publication, and shall be indemnified and held harmless by any party implementing the standard from any and all claims of infringement by a patent owner for such implementations. For information about patents held by third-parties which have notified the DMTF that, in their opinion, such patent may relate to or impact implementations of DMTF standards, visit http://www.dmtf.org/about/policies/disclosures.php.
     
     The Open Virtualization Specification 1.0.0 specifies how this schema shall be used.    
 -->
@@ -46,7 +46,9 @@
                     <xs:documentation>Meta-data particular to a given
                     entity</xs:documentation>
                 </xs:annotation>
-            </xs:element>            
+            </xs:element>
+            <xs:any namespace="##other" processContents="lax" minOccurs="0" 
+                maxOccurs="unbounded"/>                    
         </xs:sequence>
         <xs:attribute name="id" type="xs:string" default="" use="optional">
             <xs:annotation>
@@ -64,6 +66,8 @@
         </xs:annotation>
         <xs:sequence>
             <xs:element ref="ovfenv:Section" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:any namespace="##other" processContents="lax" minOccurs="0" 
+                maxOccurs="unbounded"/>                    
         </xs:sequence>
         <xs:attribute name="id" type="xs:string" use="required">
             <xs:annotation>
@@ -110,13 +114,14 @@
                 <xs:sequence>
                     <xs:element name="Property" minOccurs="0" maxOccurs="unbounded">
                         <xs:complexType>
-                            <xs:attribute name="key" type="xs:string"/>
-                            <xs:attribute name="value" type="xs:string"/>
+                            <xs:attribute name="key" type="xs:string" use="required"/>
+                            <xs:attribute name="value" type="xs:string" use="required"/>
                             <xs:anyAttribute namespace="##any" processContents="lax"/>
                         </xs:complexType>
                     </xs:element>
+                    <xs:any namespace="##other" processContents="lax" minOccurs="0" 
+                        maxOccurs="unbounded"/>                    
                 </xs:sequence>
-                <xs:anyAttribute namespace="##any" processContents="lax"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -138,36 +143,37 @@
                 <xs:sequence>
                     <xs:element name="Kind" type="cim:cimString" minOccurs="0">
                         <xs:annotation>
-                            <xs:documentation>Deployment platform
+                            <xs:documentation>Experimental: Deployment platform
                             description</xs:documentation>
                         </xs:annotation>
                     </xs:element>
                     <xs:element name="Version" type="cim:cimString" minOccurs="0">
                         <xs:annotation>
-                            <xs:documentation>Deployment platform
+                            <xs:documentation>Experimental: Deployment platform
                             version</xs:documentation>
                         </xs:annotation>
                     </xs:element>
                     <xs:element name="Vendor" type="cim:cimString" minOccurs="0">
                         <xs:annotation>
-                            <xs:documentation>Deployment platform
+                            <xs:documentation>Experimental: Deployment platform
                             vendor</xs:documentation>
                         </xs:annotation>
                     </xs:element>
                     <xs:element name="Locale" type="cim:cimString" minOccurs="0">
                         <xs:annotation>
-                            <xs:documentation>Current locale</xs:documentation>
+                            <xs:documentation>Experimental: Current locale</xs:documentation>
                         </xs:annotation>
                     </xs:element>
                     <xs:element name="Timezone" type="xs:int" minOccurs="0">
                         <xs:annotation>
-                            <xs:documentation>Current timezone offset in minutes from
-                                UTC. Time zones east of Greenwich are positive and time
+                            <xs:documentation>Experimental: Current timezone offset in minutes 
+                                from UTC. Time zones east of Greenwich are positive and time
                                 zones west of Greenwich are negative.</xs:documentation>
                         </xs:annotation>
                     </xs:element>
+                    <xs:any namespace="##other" processContents="lax" minOccurs="0" 
+                        maxOccurs="unbounded"/>                    
                 </xs:sequence>
-                <xs:anyAttribute namespace="##any" processContents="lax"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>

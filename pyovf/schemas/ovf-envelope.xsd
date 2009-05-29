@@ -1,15 +1,15 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <!--
     Notice 
     DSP8023
-    Document: OVF XML Schema Specification, ovf-envelope.xsd
-    Version: 1.0.0d
-    Status: Preliminary Standard
-    Date: 08/14/2008
+    Document: OVF XML Schema Specification for OVF Envelope
+    Version: 1.0.0
+    Status: Standard
+    Date: 01/15/2009
     Description: XML schema specification for Open Virtualization Format.
     
-    Copyright © 2008 Distributed Management Task Force, Inc. (DMTF). All rights reserved. DMTF is a not-for-profit association of industry members dedicated to promoting enterprise and systems management and interoperability. Members and non-members may reproduce DMTF specifications and documents for uses consistent with this purpose, provided that correct attribution is given. As DMTF specifications may be revised from time to time, the particular version and release date should always be noted. Implementation of certain elements of this standard or proposed standard may be subject to third party patent rights, including provisional patent rights (herein "patent rights"). DMTF makes no representations to users of the standard as to the existence of such rights, and is not responsible to recognize, disclose, or identify any or all such third party patent right, owners or claimants, nor for any incomplete or inaccurate identification or disclosure of such rights, owners or claimants. DMTF shall have no liability to any party, in any manner or circumstance, under any legal theory whatsoever, for failure to recognize, disclose, or identify any such third party patent rights, or for such party’s reliance on the standard or incorporation thereof in its product, protocols or testing procedures. DMTF shall have no liability to any party implementing such standard, whether such implementation is foreseeable or not, nor to any patent owner or claimant, and shall have no liability or responsibility for costs or losses incurred if a standard is withdrawn or modified after publication, and shall be indemnified and held harmless by any party implementing the standard from any and all claims of infringement by a patent owner for such implementations. For information about patents held by third-parties which have notified the DMTF that, in their opinion, such patent may relate to or impact implementations of DMTF standards, visit http://www.dmtf.org/about/policies/disclosures.php.
-
+    Copyright © 2009 Distributed Management Task Force, Inc. (DMTF). All rights reserved. DMTF is a not-for-profit association of industry members dedicated to promoting enterprise and systems management and interoperability. Members and non-members may reproduce DMTF specifications and documents provided that correct attribution is given. As DMTF specifications may be revised from time to time, the particular version and release date should always be noted. Implementation of certain elements of this standard or proposed standard may be subject to third party patent rights, including provisional patent rights (herein "patent rights"). DMTF makes no representations to users of the standard as to the existence of such rights, and is not responsible to recognize, disclose, or identify any or all such third party patent right, owners or claimants, nor for any incomplete or inaccurate identification or disclosure of such rights, owners or claimants. DMTF shall have no liability to any party, in any manner or circumstance, under any legal theory whatsoever, for failure to recognize, disclose, or identify any such third party patent rights, or for such party’s reliance on the standard or incorporation thereof in its product, protocols or testing procedures. DMTF shall have no liability to any party implementing such standard, whether such implementation is foreseeable or not, nor to any patent owner or claimant, and shall have no liability or responsibility for costs or losses incurred if a standard is withdrawn or modified after publication, and shall be indemnified and held harmless by any party implementing the standard from any and all claims of infringement by a patent owner for such implementations. For information about patents held by third-parties which have notified the DMTF that, in their opinion, such patent may relate to or impact implementations of DMTF standards, visit http://www.dmtf.org/about/policies/disclosures.php.
+    
     The Open Virtualization Specification 1.0.0 specifies how this schema shall be used.
 -->
 <xs:schema 
@@ -18,8 +18,7 @@
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:cim="http://schemas.dmtf.org/wbem/wscim/1/common"
     xmlns:vssd="http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_VirtualSystemSettingData"
-    xmlns:rasd="http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_ResourceAllocationSettingData"
-    
+    xmlns:rasd="http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_ResourceAllocationSettingData"    
     attributeFormDefault="qualified" 
     elementFormDefault="qualified">
 
@@ -36,6 +35,12 @@
         namespace="http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_ResourceAllocationSettingData"
         schemaLocation="CIM_ResourceAllocationSettingData.xsd"/>
 
+    <xs:attribute name="required" type="xs:boolean" default="true">
+        <xs:annotation>
+            <xs:documentation>Determines whether import should fail if the Section is
+                not understood</xs:documentation>
+        </xs:annotation>
+    </xs:attribute>
     
     <xs:element name="Envelope" type="ovf:EnvelopeType">
         <xs:annotation>
@@ -58,7 +63,7 @@
                     <xs:documentation>Package level meta-data</xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element ref="ovf:Content" minOccurs="0">
+            <xs:element ref="ovf:Content">
                 <xs:annotation>
                     <xs:documentation>Content: A VirtualSystem or a
                         VirtualSystemCollection</xs:documentation>
@@ -67,10 +72,13 @@
             <xs:element name="Strings" type="ovf:Strings_Type" minOccurs="0"
                 maxOccurs="unbounded">
                 <xs:annotation>
-                    <xs:documentation>Localized string resource
-                    bundles</xs:documentation>
+                    <xs:documentation>Localized string resource bundles
+                    </xs:documentation>
                 </xs:annotation>
             </xs:element>
+            <!-- xs:any with namespace ##other extension point not present here, 
+                extensions at outermost Envelope level should be done by defining 
+                new members of the ovf:Section substitution group -->
         </xs:sequence>
         <xs:anyAttribute namespace="##any" processContents="lax"/>
     </xs:complexType>
@@ -80,7 +88,9 @@
             <xs:documentation>Type for list of external resources</xs:documentation>
         </xs:annotation>
         <xs:sequence>
-            <xs:element name="File" type="ovf:File_Type" minOccurs="0"
+            <xs:element name="File" type="ovf:File_Type" minOccurs="0" 
+                maxOccurs="unbounded"/>
+            <xs:any namespace="##other" processContents="lax" minOccurs="0" 
                 maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:anyAttribute namespace="##any" processContents="lax"/>
@@ -91,6 +101,10 @@
             <xs:documentation>Type for an external reference to a
             resource</xs:documentation>
         </xs:annotation>
+        <xs:sequence>
+            <xs:any namespace="##other" processContents="lax" minOccurs="0" 
+                maxOccurs="unbounded"/>
+        </xs:sequence>
         <xs:attribute name="id" type="xs:string" use="required">
             <xs:annotation>
                 <xs:documentation>Reference key used in other parts of the
@@ -134,15 +148,14 @@
             <xs:documentation>Base class for content</xs:documentation>
         </xs:annotation>
         <xs:sequence>
-            <xs:element name="Info" type="ovf:Msg_Type" minOccurs="0">
+            <xs:element name="Info" type="ovf:Msg_Type">
                 <xs:annotation>
                     <xs:documentation>Info element describes the meaning of the content,
                         this is typically shown if the type is not understood by an
                         application</xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="Name" type="ovf:Msg_Type" minOccurs="0" 
-                maxOccurs="unbounded">
+            <xs:element name="Name" type="ovf:Msg_Type" minOccurs="0">
                 <xs:annotation>
                     <xs:documentation>An optional localizable display name of the content
                     </xs:documentation>
@@ -154,6 +167,9 @@
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
+            <!-- xs:any with namespace ##other extension point not present here, 
+                extensions at Content level should be done by defining new members 
+                of the ovf:Section substitution group -->
         </xs:sequence>
         <xs:attribute name="id" type="xs:string" use="required"/>
         <xs:anyAttribute namespace="##any" processContents="lax"/>
@@ -162,8 +178,8 @@
     <xs:element name="VirtualSystem" type="ovf:VirtualSystem_Type"
         substitutionGroup="ovf:Content">
         <xs:annotation>
-            <xs:documentation>Element substitutable for Content since VirtualSystem is a
-                derivation of Content_Type </xs:documentation>
+            <xs:documentation>Element substitutable for Content since VirtualSystem_Type 
+                is a derivation of Content_Type </xs:documentation>
         </xs:annotation>
     </xs:element>
 
@@ -172,17 +188,15 @@
             <xs:documentation>Content describing a virtual system</xs:documentation>
         </xs:annotation>
         <xs:complexContent>
-            <xs:extension base="ovf:Content_Type">
-                <xs:anyAttribute namespace="##any" processContents="lax"/>
-            </xs:extension>
+            <xs:extension base="ovf:Content_Type"/>
         </xs:complexContent>
     </xs:complexType>
 
     <xs:element name="VirtualSystemCollection" type="ovf:VirtualSystemCollection_Type"
         substitutionGroup="ovf:Content">
         <xs:annotation>
-            <xs:documentation>Element substitutable for Content since VirtualSystem is a
-                derivation of Content_Type </xs:documentation>
+            <xs:documentation>Element substitutable for Content since VirtualSystemCollection_Type 
+                is a derivation of Content_Type </xs:documentation>
         </xs:annotation>
     </xs:element>
 
@@ -195,7 +209,6 @@
                 <xs:sequence>
                     <xs:element ref="ovf:Content" minOccurs="0" maxOccurs="unbounded"/>
                 </xs:sequence>
-                <xs:anyAttribute namespace="##any" processContents="lax"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -219,8 +232,8 @@
                             </xs:annotation>
                             <xs:attribute name="msgid" type="xs:string" use="required">
                                 <xs:annotation>
-                                    <xs:documentation>String element
-                                    identifier</xs:documentation>
+                                    <xs:documentation>String element identifier
+                                    </xs:documentation>
                                 </xs:annotation>
                             </xs:attribute>
                             <xs:anyAttribute namespace="##any" processContents="lax"/>
@@ -268,12 +281,7 @@
                 </xs:annotation>
             </xs:element>
         </xs:sequence>
-        <xs:attribute name="required" type="xs:boolean" default="true" use="optional">
-            <xs:annotation>
-                <xs:documentation>Determines whether import should fail if the Section is
-                    not understood</xs:documentation>
-            </xs:annotation>
-        </xs:attribute>
+        <xs:attribute ref="ovf:required" use="optional"/>
         <xs:anyAttribute namespace="##any" processContents="lax"/>
     </xs:complexType>
 
@@ -316,8 +324,9 @@
             <xs:extension base="ovf:Section_Type">
                 <xs:sequence>
                     <xs:element name="Annotation" type="ovf:Msg_Type"/>
+                    <xs:any namespace="##other" processContents="lax" minOccurs="0" 
+                        maxOccurs="unbounded"/>
                 </xs:sequence>
-                <xs:anyAttribute namespace="##any" processContents="lax"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -338,14 +347,45 @@
         <xs:complexContent>
             <xs:extension base="ovf:Section_Type">
                 <xs:sequence>
-                    <xs:element name="Product" type="ovf:Msg_Type" minOccurs="0"/>
-                    <xs:element name="Vendor" type="ovf:Msg_Type" minOccurs="0"/>
-                    <xs:element name="Version" type="cim:cimString" minOccurs="0"/>
-                    <xs:element name="FullVersion" type="cim:cimString" minOccurs="0"/>
-                    <xs:element name="ProductUrl" type="cim:cimString" minOccurs="0"/>
-                    <xs:element name="VendorUrl" type="cim:cimString" minOccurs="0"/>
-                    <xs:element name="AppUrl" type="cim:cimString" minOccurs="0"/>
+                    <xs:element name="Product" type="ovf:Msg_Type" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>Name of product</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Vendor" type="ovf:Msg_Type" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>Name of product vendor</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="Version" type="cim:cimString" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>Product version, short form</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="FullVersion" type="cim:cimString" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>Product version, long form</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="ProductUrl" type="cim:cimString" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>URL resolving to product description</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="VendorUrl" type="cim:cimString" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>URL resolving to vendor description</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="AppUrl" type="cim:cimString" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>Experimental: URL resolving to deployed product instance</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
                     <xs:element name="Icon" minOccurs="0" maxOccurs="unbounded">
+                        <xs:annotation>
+                            <xs:documentation>Experimental: Display icon for product</xs:documentation>
+                        </xs:annotation>
                         <xs:complexType>
                             <xs:attribute name="height" type="xs:unsignedShort" use="optional"/>
                             <xs:attribute name="width" type="xs:unsignedShort" use="optional"/>
@@ -354,7 +394,6 @@
                             <xs:anyAttribute namespace="##any" processContents="lax"/>
                         </xs:complexType>
                     </xs:element>
-
                     <xs:choice minOccurs="0" maxOccurs="unbounded">
                         <xs:annotation>
                             <xs:documentation>Properties for application-level
@@ -430,11 +469,12 @@
                                         property</xs:documentation>
                                     </xs:annotation>
                                 </xs:attribute>
-                                <xs:anyAttribute namespace="##any" processContents="lax"
-                                />
+                                <xs:anyAttribute namespace="##any" processContents="lax"/>
                             </xs:complexType>
                         </xs:element>
                     </xs:choice>
+                    <xs:any namespace="##other" processContents="lax" minOccurs="0" 
+                        maxOccurs="unbounded"/>                    
                 </xs:sequence>
                 <xs:attribute name="class" type="xs:string" default="" use="optional">
                     <xs:annotation>
@@ -446,7 +486,6 @@
                         <xs:documentation>Property identifier suffix</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
-                <xs:anyAttribute namespace="##any" processContents="lax"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -456,6 +495,10 @@
             <xs:documentation>Type for alternative default values for properties when
                 DeploymentOptionSection is used</xs:documentation>
         </xs:annotation>
+        <xs:sequence>
+            <xs:any namespace="##other" processContents="lax" minOccurs="0" 
+                maxOccurs="unbounded"/>
+        </xs:sequence>
         <xs:attribute name="value" type="xs:string" use="required">
             <xs:annotation>
                 <xs:documentation>Alternative default property value</xs:documentation>
@@ -467,6 +510,7 @@
                     this value is default</xs:documentation>
             </xs:annotation>
         </xs:attribute>
+        <xs:anyAttribute namespace="##any" processContents="lax"/>
     </xs:complexType>
 
     <xs:element name="NetworkSection" type="ovf:NetworkSection_Type"
@@ -495,8 +539,9 @@
                             <xs:anyAttribute namespace="##any" processContents="lax"/>
                         </xs:complexType>
                     </xs:element>
+                    <xs:any namespace="##other" processContents="lax" minOccurs="0" 
+                        maxOccurs="unbounded"/>                    
                 </xs:sequence>
-                <xs:anyAttribute namespace="##any" processContents="lax"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -517,10 +562,11 @@
         <xs:complexContent>
             <xs:extension base="ovf:Section_Type">
                 <xs:sequence>
-                    <xs:element name="Disk" type="ovf:VirtualDiskDesc_Type" minOccurs="0"
-                        maxOccurs="unbounded"/>
+                    <xs:element name="Disk" type="ovf:VirtualDiskDesc_Type" minOccurs="0" 
+                        maxOccurs="unbounded"/>                
+                    <xs:any namespace="##other" processContents="lax" minOccurs="0" 
+                        maxOccurs="unbounded"/>                                        
                 </xs:sequence>
-                <xs:anyAttribute namespace="##any" processContents="lax"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -529,6 +575,10 @@
         <xs:annotation>
             <xs:documentation>Type for virtual disk descriptor</xs:documentation>
         </xs:annotation>
+        <xs:sequence>
+            <xs:any namespace="##other" processContents="lax" minOccurs="0" 
+                maxOccurs="unbounded"/>
+        </xs:sequence>
         <xs:attribute name="diskId" type="xs:string" use="required">
             <xs:annotation>
                 <xs:documentation>Identifier for virtual disk</xs:documentation>
@@ -548,14 +598,14 @@
                 </xs:documentation>
             </xs:annotation>
         </xs:attribute>
-        <xs:attribute name="capacityAllocationUnits" type="xs:string" use="optional">
+        <xs:attribute name="capacityAllocationUnits" type="xs:string" default="byte" use="optional">
             <xs:annotation>
                 <xs:documentation>Unit of allocation for ovf:capacity. If not specified
                     default value is bytes. Value shall match a recognized value for the
                     UNITS qualifier in DSP0004.</xs:documentation>
             </xs:annotation>
         </xs:attribute>
-        <xs:attribute name="format" type="xs:string" use="required">
+        <xs:attribute name="format" type="xs:string" use="optional">
             <xs:annotation>
                 <xs:documentation>Format of virtual disk given as a URI that identifies
                     the disk type</xs:documentation>
@@ -572,6 +622,7 @@
                 <xs:documentation>Reference to potential parent disk</xs:documentation>
             </xs:annotation>
         </xs:attribute>
+        <xs:anyAttribute namespace="##any" processContents="lax"/>
     </xs:complexType>
 
     <xs:element name="OperatingSystemSection" type="ovf:OperatingSystemSection_Type"
@@ -592,6 +643,8 @@
             <xs:extension base="ovf:Section_Type">
                 <xs:sequence>
                     <xs:element name="Description" type="ovf:Msg_Type" minOccurs="0"/>
+                    <xs:any namespace="##other" processContents="lax" minOccurs="0" 
+                        maxOccurs="unbounded"/>                    
                 </xs:sequence>
                 <xs:attribute name="id" type="xs:unsignedShort" use="required">
                     <xs:annotation>
@@ -605,7 +658,6 @@
                             CIM_OperatingSystem.Version field</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
-                <xs:anyAttribute namespace="##any" processContents="lax"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -626,8 +678,9 @@
             <xs:extension base="ovf:Section_Type">
                 <xs:sequence>
                     <xs:element name="License" type="ovf:Msg_Type"/>
+                    <xs:any namespace="##other" processContents="lax" minOccurs="0" 
+                        maxOccurs="unbounded"/>                    
                 </xs:sequence>
-                <xs:anyAttribute namespace="##any" processContents="lax"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -652,6 +705,8 @@
                     <xs:element name="System" type="ovf:VSSD_Type" minOccurs="0"/>
                     <xs:element name="Item" type="ovf:RASD_Type" minOccurs="0"
                         maxOccurs="unbounded"/>
+                    <xs:any namespace="##other" processContents="lax" minOccurs="0" 
+                        maxOccurs="unbounded"/>                    
                 </xs:sequence>
                 <xs:attribute name="transport" default="" type="xs:string" use="optional">
                     <xs:annotation>
@@ -659,7 +714,6 @@
                             types for the OVF descriptor</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
-                <xs:anyAttribute namespace="##any" processContents="lax"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -683,8 +737,9 @@
                 <xs:sequence>
                     <xs:element name="Item" type="ovf:RASD_Type" minOccurs="0"
                         maxOccurs="unbounded"/>                    
+                    <xs:any namespace="##other" processContents="lax" minOccurs="0" 
+                        maxOccurs="unbounded"/>                    
                 </xs:sequence>                
-                <xs:anyAttribute namespace="##any" processContents="lax"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -704,6 +759,10 @@
         </xs:annotation>
         <xs:complexContent>
             <xs:extension base="ovf:Section_Type">                
+                <xs:sequence>
+                    <xs:any namespace="##other" processContents="lax" minOccurs="0" 
+                        maxOccurs="unbounded"/>
+                </xs:sequence>
                 <xs:attribute name="initialBootStopDelay" type="xs:unsignedShort" default="0"
                     use="optional">
                     <xs:annotation>
@@ -711,7 +770,6 @@
                             complete after initial boot</xs:documentation>
                     </xs:annotation>
                 </xs:attribute>
-                <xs:anyAttribute namespace="##any" processContents="lax"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -791,8 +849,9 @@
                             <xs:anyAttribute namespace="##any" processContents="lax"/>
                         </xs:complexType>
                     </xs:element>
+                    <xs:any namespace="##other" processContents="lax" minOccurs="0" 
+                        maxOccurs="unbounded"/>                    
                 </xs:sequence>
-                <xs:anyAttribute namespace="##any" processContents="lax"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -826,8 +885,9 @@
                             <xs:anyAttribute namespace="##any" processContents="lax"/>
                         </xs:complexType>
                     </xs:element>
+                    <xs:any namespace="##other" processContents="lax" minOccurs="0" 
+                        maxOccurs="unbounded"/>                    
                 </xs:sequence>
-                <xs:anyAttribute namespace="##any" processContents="lax"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>

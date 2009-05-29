@@ -165,8 +165,9 @@ class EulaSection(OvfObject):
 class VirtualSystem(OvfObject):
 
     _xobj = xobj.XObjMetadata(
-            attributes = { 'ovf_id' : str, 'ovf_info' : str },
-            elements = [ 'ovf_EulaSection',
+            attributes = { 'ovf_id' : str, },
+            elements = [ 'ovf_Info', 
+                         'ovf_EulaSection',
                          'ovf_ProductSection',
                          'ovf_VirtualHardwareSection', ] )
 

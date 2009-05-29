@@ -28,9 +28,20 @@ class PyOvfTest(TestCase):
     diskSectionInfo = 'testDiskSectionInfo'
     networkSectionInfo = 'testNetworkSectionInfo'
     virtualSystemId = 'testVirtualSystemId'
+    virtualSystemInfo = 'testVirtualSystemInfo'
     productInfo = 'testProductInfo'
     virtualSystemCollectionId = 'testVirtualSystemCollectionId'
     virtualHardwareSectionInfo = 'testVirtualHardwareSectionInfo'
+
+    debug = False
+
+    def writeXml(self, xmlName, xml):
+        f = open('pyovftestxml.py', 'a')
+        f.write('%s = """\\' % xmlName)
+        f.write('\n')
+        f.write(xml + '"""')
+        f.write('\n\n')
+        f.close()
 
     def setUp(self):
         self.ovf = helper.NewOvf()
@@ -62,6 +73,7 @@ class PyOvfTest(TestCase):
         s = ovf.VirtualSystem()
         s.ovf_ProductSection = p
         s.ovf_id = self.virtualSystemId
+        s.ovf_Info = self.virtualSystemInfo
         self.ovf.addVirtualSystem(s)
         return s
 
@@ -79,11 +91,15 @@ class PyOvfTest(TestCase):
 
     def testNewOvfXml(self):
         xml = self.ovf.toxml()
+        if self.debug:
+            self.writeXml('newXml', xml)
         self.assertEquals(xml, newXml)
        
     def testAddFileReference(self):
         self.addFileReference(self.fileId)
         xml = self.ovf.toxml()
+        if self.debug:
+            self.writeXml('fileXml', xml)
         self.assertEquals(xml, fileXml)
 
     def testAddDiskWithFormat(self):
@@ -92,6 +108,8 @@ class PyOvfTest(TestCase):
         self.addDisk(ovf_diskId=self.diskId, ovf_fileRef=file, 
             ovf_format=df, ovf_capacity=self.capacity)
         xml = self.ovf.toxml()
+        if self.debug:
+            self.writeXml('diskWithFormatXml', xml)
         self.assertEquals(xml, diskWithFormatXml)
 
         file2 = ovf.FileReference()
@@ -100,6 +118,8 @@ class PyOvfTest(TestCase):
         self.addDisk(ovf_diskId=self.diskId, ovf_fileRef=file2, 
             ovf_format=df, ovf_capacity=self.capacity)
         xml = self.ovf.toxml()
+        if self.debug:
+            self.writeXml('diskWithFormatXml2', xml)
         self.assertEquals(xml, diskWithFormatXml2)
 
     def testAddDiskWithCompressedFormat(self):
@@ -108,6 +128,8 @@ class PyOvfTest(TestCase):
         self.addDisk(ovf_diskId=self.diskId, ovf_fileRef=file, 
             ovf_format=df, ovf_capacity=self.capacity)
         xml = self.ovf.toxml()
+        if self.debug:
+            self.writeXml('diskWithCompressedFormatXml', xml)
         self.assertEquals(xml, diskWithCompressedFormatXml)
 
     def testAbstractDiskFormat(self):
@@ -126,14 +148,20 @@ class PyOvfTest(TestCase):
         s = self.addSystem()
         self.addSystemProperty(s, 'propertyKey', 'string')
         xml = self.ovf.toxml()
+        if self.debug:
+            self.writeXml('systemPropertyXml', xml)
         self.assertEquals(xml, systemPropertyXml)
         
     def testAddNetwork(self):
         n = self.addNetwork()
         xml = self.ovf.toxml()
+        if self.debug:
+            self.writeXml('networkXml', xml)
         self.assertEquals(xml, networkXml)
 
     def testOvfFile(self):
+        if self.debug:
+            self.write('ovfFileXml', ovfFileXml)
         s = StringIO(ovfFileXml)
         ovfObj = helper.OvfFile(s)
         self.assertEquals(ovfObj.DiskSection.Info,
@@ -173,7 +201,7 @@ class PyOvfTest(TestCase):
 
         vs = ovf.VirtualSystem()
         vs.id = 'newId'
-        vs.info = 'newInfo'
+        vs.Info = 'newInfo'
         vs.addVirtualHardwareSection(vhws)
         newOvf.addVirtualSystem(vs)
 
@@ -187,4 +215,6 @@ class PyOvfTest(TestCase):
 
         xml = newOvf.toxml()
 
+        if self.debug:
+            self.writeXml('newXml2', xml)
         self.assertEquals(xml, newXml2)
