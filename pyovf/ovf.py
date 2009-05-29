@@ -112,6 +112,7 @@ class DiskSection(OvfObject):
 class Network(OvfObject):
 
     _xobj = xobj.XObjMetadata(
+            elements = [ 'ovf_Description' ],
             attributes = { "ovf_id" : str,
                            "ovf_name" : xobj.XID } )
 
@@ -122,27 +123,6 @@ class NetworkSection(OvfObject):
 
     ovf_Info = str            
     ovf_Network = [ Network ]
-
-class Property(OvfObject):
-
-    _xobj = xobj.XObjMetadata(attributes = { 'ovf_key' : str,
-                                             'ovf_type' : str } )
-
-class Product(OvfObject):
-
-    _xobj = xobj.XObjMetadata(
-            elements = [ 'ovf_Info', 'ovf_FullVersion', 'ovf_Property' ])
-
-    ovf_Info = str
-    ovf_FullVersion = str
-    ovf_Property = [ Property ]
-
-    def addProperty(self, p):
-        self.ovf_Property.append(p)
-
-class ProductSection(OvfObject):
-
-    ovf_Product = [ Product ]
 
 class VirtualHardwareSection(OvfObject):
 
@@ -155,17 +135,44 @@ class VirtualHardwareSection(OvfObject):
     def addItem(self, item):
         self.ovf_Item.append(item)
 
+class Property(OvfObject):
+
+    _xobj = xobj.XObjMetadata(attributes = { 'ovf_key' : str,
+                                             'ovf_type' : str } )
+
+class Category(OvfObject):
+    pass
+
+class ProductSection(OvfObject):
+
+    _xobj = xobj.XObjMetadata(
+            elements = [ 'ovf_Info', 'ovf_Product', 'ovf_Vendor',
+                         'ovf_Version', 'ovf_FullVersion',
+                         'ovf_ProductUrl', 'ovf_VendorUrl',
+                         'ovf_Icon', 'ovf_Category', 'ovf_Property'])
+
+    ovf_Category = [ Category ]
+    ovf_Property = [ Property ]
+
+    def addProperty(self, property):
+        self.ovf_Property.append(property)
+
+class EulaSection(OvfObject):
+    
+    _xobj = xobj.XObjMetadata(
+            elements = [ 'ovf_Info', 'ovf_License' ])
+
 class VirtualSystem(OvfObject):
 
     _xobj = xobj.XObjMetadata(
             attributes = { 'ovf_id' : str, 'ovf_info' : str },
-            elements = [ 'ovf_VirtualHardwareSection', ] )
+            elements = [ 'ovf_EulaSection',
+                         'ovf_ProductSection',
+                         'ovf_VirtualHardwareSection', ] )
 
-    ovf_ProductSection = [ ProductSection ]
+    ovf_EulaSection = EulaSection
+    ovf_ProductSection = ProductSection
     ovf_VirtualHardwareSection = [ VirtualHardwareSection ] 
-
-    def addProduct(self, p):
-        self.ovf_ProductSection.append(p)
 
     def addVirtualHardwareSection(self, vhws):
         self.ovf_VirtualHardwareSection.append(vhws)
@@ -186,15 +193,30 @@ class ReferencesSection(OvfObject):
 
     ovf_File = [ FileReference ]
 
+class ResourceAllocationSection(OvfObject):
+
+    _xobj = xobj.XObjMetadata(
+            elements = [ 'ovf_Info', 'ovf_Item' ])
+
+    ovf_Item = [ Item ]            
+
+    def addItem(self, item):
+        self.ovf_Item.append(item)
+
 class Ovf(OvfObject):
 
     _xobj = xobj.XObjMetadata(
-            elements = [ 'ovf_References', 'ovf_DiskSection',
-                         'ovf_NetworkSection', 'ovf_VirtualSystemCollection' ] )
+            elements = [ 'ovf_References', 
+                         'ovf_DiskSection',
+                         'ovf_NetworkSection',
+                         'ovf_ResourceAllocationSection',
+                         'ovf_VirtualSystemCollection'
+                         ] )
 
     ovf_References = ReferencesSection
     ovf_DiskSection = DiskSection
     ovf_NetworkSection = NetworkSection
+    ovf_ResourceAllocationSection = ResourceAllocationSection
     ovf_VirtualSystemCollection = VirtualSystemCollection
 
     def addDisk(self, d):

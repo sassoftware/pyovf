@@ -1,5 +1,6 @@
 
-newXml = """<?xml version='1.0' encoding='UTF-8'?>
+newXml = """\
+<?xml version='1.0' encoding='UTF-8'?>
 <ovf:Envelope xmlns:rasd="http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_ResourceAllocationSettingData" xmlns:ovf="http://schemas.dmtf.org/ovf/envelope/1">
   <ovf:References/>
   <ovf:DiskSection>
@@ -7,12 +8,19 @@ newXml = """<?xml version='1.0' encoding='UTF-8'?>
   </ovf:DiskSection>
   <ovf:NetworkSection>
     <ovf:Info>testNetworkSectionInfo</ovf:Info>
+    <ovf:Network ovf:name="Network Name">
+      <ovf:Description>Network Description</ovf:Description>
+    </ovf:Network>
   </ovf:NetworkSection>
+  <ovf:ResourceAllocationSection>
+    <ovf:Info>Resource Allocation Section Info</ovf:Info>
+  </ovf:ResourceAllocationSection>
   <ovf:VirtualSystemCollection ovf:id="testVirtualSystemCollectionId"/>
 </ovf:Envelope>
 """
 
-fileXml = """<?xml version='1.0' encoding='UTF-8'?>
+fileXml = """\
+<?xml version='1.0' encoding='UTF-8'?>
 <ovf:Envelope xmlns:rasd="http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_ResourceAllocationSettingData" xmlns:ovf="http://schemas.dmtf.org/ovf/envelope/1">
   <ovf:References>
     <ovf:File ovf:href="testFileHref" ovf:id="testFileId"/>
@@ -22,12 +30,19 @@ fileXml = """<?xml version='1.0' encoding='UTF-8'?>
   </ovf:DiskSection>
   <ovf:NetworkSection>
     <ovf:Info>testNetworkSectionInfo</ovf:Info>
+    <ovf:Network ovf:name="Network Name">
+      <ovf:Description>Network Description</ovf:Description>
+    </ovf:Network>
   </ovf:NetworkSection>
+  <ovf:ResourceAllocationSection>
+    <ovf:Info>Resource Allocation Section Info</ovf:Info>
+  </ovf:ResourceAllocationSection>
   <ovf:VirtualSystemCollection ovf:id="testVirtualSystemCollectionId"/>
 </ovf:Envelope>
 """
 
-diskWithFormatXml = """<?xml version='1.0' encoding='UTF-8'?>
+diskWithFormatXml = """\
+<?xml version='1.0' encoding='UTF-8'?>
 <ovf:Envelope xmlns:rasd="http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_ResourceAllocationSettingData" xmlns:ovf="http://schemas.dmtf.org/ovf/envelope/1">
   <ovf:References>
     <ovf:File ovf:href="testFileHref" ovf:id="testFileId"/>
@@ -38,12 +53,19 @@ diskWithFormatXml = """<?xml version='1.0' encoding='UTF-8'?>
   </ovf:DiskSection>
   <ovf:NetworkSection>
     <ovf:Info>testNetworkSectionInfo</ovf:Info>
+    <ovf:Network ovf:name="Network Name">
+      <ovf:Description>Network Description</ovf:Description>
+    </ovf:Network>
   </ovf:NetworkSection>
+  <ovf:ResourceAllocationSection>
+    <ovf:Info>Resource Allocation Section Info</ovf:Info>
+  </ovf:ResourceAllocationSection>
   <ovf:VirtualSystemCollection ovf:id="testVirtualSystemCollectionId"/>
 </ovf:Envelope>
 """
 
-diskWithFormatXml2 = """<?xml version='1.0' encoding='UTF-8'?>
+diskWithFormatXml2 = """\
+<?xml version='1.0' encoding='UTF-8'?>
 <ovf:Envelope xmlns:rasd="http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_ResourceAllocationSettingData" xmlns:ovf="http://schemas.dmtf.org/ovf/envelope/1">
   <ovf:References>
     <ovf:File ovf:href="testFileHref" ovf:id="testFileId"/>
@@ -56,12 +78,19 @@ diskWithFormatXml2 = """<?xml version='1.0' encoding='UTF-8'?>
   </ovf:DiskSection>
   <ovf:NetworkSection>
     <ovf:Info>testNetworkSectionInfo</ovf:Info>
+    <ovf:Network ovf:name="Network Name">
+      <ovf:Description>Network Description</ovf:Description>
+    </ovf:Network>
   </ovf:NetworkSection>
+  <ovf:ResourceAllocationSection>
+    <ovf:Info>Resource Allocation Section Info</ovf:Info>
+  </ovf:ResourceAllocationSection>
   <ovf:VirtualSystemCollection ovf:id="testVirtualSystemCollectionId"/>
 </ovf:Envelope>
 """
 
-diskWithCompressedFormatXml = """<?xml version='1.0' encoding='UTF-8'?>
+diskWithCompressedFormatXml = """\
+<?xml version='1.0' encoding='UTF-8'?>
 <ovf:Envelope xmlns:rasd="http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_ResourceAllocationSettingData" xmlns:ovf="http://schemas.dmtf.org/ovf/envelope/1">
   <ovf:References>
     <ovf:File ovf:href="testFileHref" ovf:id="testFileId"/>
@@ -72,12 +101,19 @@ diskWithCompressedFormatXml = """<?xml version='1.0' encoding='UTF-8'?>
   </ovf:DiskSection>
   <ovf:NetworkSection>
     <ovf:Info>testNetworkSectionInfo</ovf:Info>
+    <ovf:Network ovf:name="Network Name">
+      <ovf:Description>Network Description</ovf:Description>
+    </ovf:Network>
   </ovf:NetworkSection>
+  <ovf:ResourceAllocationSection>
+    <ovf:Info>Resource Allocation Section Info</ovf:Info>
+  </ovf:ResourceAllocationSection>
   <ovf:VirtualSystemCollection ovf:id="testVirtualSystemCollectionId"/>
 </ovf:Envelope>
 """
 
-systemPropertyXml = """<?xml version='1.0' encoding='UTF-8'?>
+systemPropertyXml = """\
+<?xml version='1.0' encoding='UTF-8'?>
 <ovf:Envelope xmlns:rasd="http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_ResourceAllocationSettingData" xmlns:ovf="http://schemas.dmtf.org/ovf/envelope/1">
   <ovf:References/>
   <ovf:DiskSection>
@@ -85,7 +121,13 @@ systemPropertyXml = """<?xml version='1.0' encoding='UTF-8'?>
   </ovf:DiskSection>
   <ovf:NetworkSection>
     <ovf:Info>testNetworkSectionInfo</ovf:Info>
+    <ovf:Network ovf:name="Network Name">
+      <ovf:Description>Network Description</ovf:Description>
+    </ovf:Network>
   </ovf:NetworkSection>
+  <ovf:ResourceAllocationSection>
+    <ovf:Info>Resource Allocation Section Info</ovf:Info>
+  </ovf:ResourceAllocationSection>
   <ovf:VirtualSystemCollection ovf:id="testVirtualSystemCollectionId">
     <ovf:VirtualSystem ovf:id="testVirtualSystemId">
       <ovf:ProductSection>
@@ -97,7 +139,8 @@ systemPropertyXml = """<?xml version='1.0' encoding='UTF-8'?>
 </ovf:Envelope>
 """
 
-networkXml = """<?xml version='1.0' encoding='UTF-8'?>
+networkXml = """\
+<?xml version='1.0' encoding='UTF-8'?>
 <ovf:Envelope xmlns:rasd="http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_ResourceAllocationSettingData" xmlns:ovf="http://schemas.dmtf.org/ovf/envelope/1">
   <ovf:References/>
   <ovf:DiskSection>
@@ -105,13 +148,20 @@ networkXml = """<?xml version='1.0' encoding='UTF-8'?>
   </ovf:DiskSection>
   <ovf:NetworkSection>
     <ovf:Info>testNetworkSectionInfo</ovf:Info>
+    <ovf:Network ovf:name="Network Name">
+      <ovf:Description>Network Description</ovf:Description>
+    </ovf:Network>
     <ovf:Network ovf:id="testNetworkId" ovf:name="testNetworkName"/>
   </ovf:NetworkSection>
+  <ovf:ResourceAllocationSection>
+    <ovf:Info>Resource Allocation Section Info</ovf:Info>
+  </ovf:ResourceAllocationSection>
   <ovf:VirtualSystemCollection ovf:id="testVirtualSystemCollectionId"/>
 </ovf:Envelope>
 """
 
-ovfFileXml = """<?xml version='1.0' encoding='UTF-8'?>
+ovfFileXml = """\
+<?xml version='1.0' encoding='UTF-8'?>
 <ovf:Envelope xmlns:rasd="http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_ResourceAllocationSettingData" xmlns:ovf="http://schemas.dmtf.org/ovf/envelope/1">
   <ovf:References/>
   <ovf:DiskSection>
@@ -144,7 +194,13 @@ newXml2 = """\
   </ovf:DiskSection>
   <ovf:NetworkSection>
     <ovf:Info>network section info</ovf:Info>
+    <ovf:Network ovf:name="Network Name">
+      <ovf:Description>Network Description</ovf:Description>
+    </ovf:Network>
   </ovf:NetworkSection>
+  <ovf:ResourceAllocationSection>
+    <ovf:Info>Resource Allocation Section Info</ovf:Info>
+  </ovf:ResourceAllocationSection>
   <ovf:VirtualSystemCollection ovf:id="testVirtualSystemCollectionId">
     <ovf:VirtualSystem ovf:info="newInfo" ovf:id="newId">
       <ovf:VirtualHardwareSection>

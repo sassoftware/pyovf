@@ -57,10 +57,10 @@ class PyOvfTest(TestCase):
         self.ovf.addDisk(d)
 
     def addSystem(self):
-        p = ovf.Product()
+        p = ovf.ProductSection()
         p.ovf_Info = self.productInfo
         s = ovf.VirtualSystem()
-        s.addProduct(p)
+        s.ovf_ProductSection = p
         s.ovf_id = self.virtualSystemId
         self.ovf.addVirtualSystem(s)
         return s
@@ -69,7 +69,7 @@ class PyOvfTest(TestCase):
         p = ovf.Property()
         p.ovf_key = key
         p.ovf_type = type
-        system.ovf_ProductSection[0].addProperty(p)
+        system.ovf_ProductSection.addProperty(p)
 
     def addNetwork(self):
         n = ovf.Network(id=self.networkId)

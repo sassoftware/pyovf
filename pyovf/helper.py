@@ -32,11 +32,17 @@ class NewOvf(ovf.Ovf):
 
         self.ovf_References = ovf.ReferencesSection()
         self.ovf_DiskSection = ovf.DiskSection()
+        self.ovf_DiskSection.ovf_Info = 'Disk Section Info'
         self.ovf_NetworkSection = ovf.NetworkSection()
+        self.ovf_NetworkSection.ovf_Info = 'Network Section Info'
+        self.ovf_ResourceAllocationSection = ovf.ResourceAllocationSection()
+        self.ovf_ResourceAllocationSection.ovf_Info = \
+            'Resource Allocation Section Info'
         self.ovf_VirtualSystemCollection = ovf.VirtualSystemCollection()
 
-        # self.ovf_DiskSection.ovf_Info = ''
-        # self.ovf_VirtualSystemCollection.ovf_id = ''
+        network = ovf.Network(name='Network Name')
+        network.ovf_Description = 'Network Description'
+        self.ovf_NetworkSection.ovf_Network.append(network)
 
 def OvfFile(f):
     schemaPath = os.path.join(os.path.dirname(__file__),
