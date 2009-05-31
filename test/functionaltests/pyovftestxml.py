@@ -147,6 +147,11 @@ newXml2 = """\
       <ovf:Info>newInfo</ovf:Info>
       <ovf:VirtualHardwareSection>
         <ovf:Info>testVirtualHardwareSectionInfo</ovf:Info>
+        <ovf:System>
+          <vssd:ElementName>testElementName</vssd:ElementName>
+          <vssd:InstanceID>testInstanceID</vssd:InstanceID>
+          <vssd:VirtualSystemType>testVirtualSystemType</vssd:VirtualSystemType>
+        </ovf:System>
         <ovf:Item>
           <rasd:Caption>Virtual CPU</rasd:Caption>
           <rasd:Description>Number of virtual CPUs</rasd:Description>

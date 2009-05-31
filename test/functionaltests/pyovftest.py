@@ -193,6 +193,10 @@ class PyOvfTest(TestCase):
 
         vhws = ovf.VirtualHardwareSection()
         vhws.Info = self.virtualHardwareSectionInfo
+        vhws.System = ovf.System()
+        vhws.System.ElementName = 'testElementName'
+        vhws.System.InstanceID = 'testInstanceID'
+        vhws.System.VirtualSystemType = 'testVirtualSystemType'
         cpu = item.Cpu()
         memory = item.Memory()
 

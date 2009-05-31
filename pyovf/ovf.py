@@ -40,7 +40,13 @@ class RasdObject(AbstractOvfObject):
 class OvfObject(AbstractOvfObject):
     prefix = 'ovf_'
 
+class VssdObject(AbstractOvfObject):
+    prefix = 'vssd_'
+
 class Item(RasdObject):
+    pass
+
+class System(VssdObject):
     pass
 
 class AbstractDiskFormat(object):
@@ -127,9 +133,10 @@ class NetworkSection(OvfObject):
 class VirtualHardwareSection(OvfObject):
 
     _xobj = xobj.XObjMetadata(
-            elements = [ 'ovf_Info', 'ovf_Item' ])
+            elements = [ 'ovf_Info', 'ovf_System' , 'ovf_Item'])
 
     ovf_Info = str
+    ovf_System = System
     ovf_Item = [ Item ]
 
     def addItem(self, item):
