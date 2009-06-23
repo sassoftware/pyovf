@@ -47,7 +47,9 @@ class Item(RasdObject):
     pass
 
 class System(VssdObject):
-    pass
+    _xobj = xobj.XObjMetadata(
+            elements = [ 'vssd_ElementName', 'vssd_InstanceID', 
+                         'vssd_VirtualSystemType' ] )
 
 class AbstractDiskFormat(object):
 
@@ -185,22 +187,6 @@ class VirtualSystem(OvfObject):
     def addVirtualHardwareSection(self, vhws):
         self.ovf_VirtualHardwareSection.append(vhws)
 
-class VirtualSystemCollection(OvfObject):
-    
-    _xobj = xobj.XObjMetadata(
-            elements = [ 'ovf_Info', 'ovf_VirtualSystem' ],
-            attributes = { 'ovf_id' : str})
-
-    ovf_Info = str
-    ovf_VirtualSystem = [ VirtualSystem ]
-
-    def addVirtualSystem(self, vs):
-        self.ovf_VirtualSystem.append(vs)
-
-class ReferencesSection(OvfObject):
-
-    ovf_File = [ FileReference ]
-
 class ResourceAllocationSection(OvfObject):
 
     _xobj = xobj.XObjMetadata(
@@ -211,20 +197,36 @@ class ResourceAllocationSection(OvfObject):
     def addItem(self, item):
         self.ovf_Item.append(item)
 
+class VirtualSystemCollection(OvfObject):
+    
+    _xobj = xobj.XObjMetadata(
+            elements = [ 'ovf_Info', 'ovf_ResourceAllocationSection', 
+                         'ovf_VirtualSystem' ],
+            attributes = { 'ovf_id' : str})
+
+    ovf_Info = str
+    ovf_ResourceAllocationSection = ResourceAllocationSection
+    ovf_VirtualSystem = [ VirtualSystem ]
+
+    def addVirtualSystem(self, vs):
+        self.ovf_VirtualSystem.append(vs)
+
+class ReferencesSection(OvfObject):
+
+    ovf_File = [ FileReference ]
+
 class Ovf(OvfObject):
 
     _xobj = xobj.XObjMetadata(
             elements = [ 'ovf_References', 
                          'ovf_DiskSection',
                          'ovf_NetworkSection',
-                         'ovf_ResourceAllocationSection',
                          'ovf_VirtualSystemCollection'
                          ] )
 
     ovf_References = ReferencesSection
     ovf_DiskSection = DiskSection
     ovf_NetworkSection = NetworkSection
-    ovf_ResourceAllocationSection = ResourceAllocationSection
     ovf_VirtualSystemCollection = VirtualSystemCollection
 
     def addDisk(self, d):

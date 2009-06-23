@@ -37,12 +37,12 @@ class NewOvf(ovf.Ovf):
         self.ovf_DiskSection.ovf_Info = 'Disk Section Info'
         self.ovf_NetworkSection = ovf.NetworkSection()
         self.ovf_NetworkSection.ovf_Info = 'Network Section Info'
-        self.ovf_ResourceAllocationSection = ovf.ResourceAllocationSection()
-        self.ovf_ResourceAllocationSection.ovf_Info = \
-            'Resource Allocation Section Info'
         self.ovf_VirtualSystemCollection = ovf.VirtualSystemCollection()
         self.ovf_VirtualSystemCollection.ovf_Info = \
             'Virtual System Collection Info'
+        self.ovf_VirtualSystemCollection.ovf_ResourceAllocationSection = \
+            ovf.ResourceAllocationSection()
+        self.ovf_VirtualSystemCollection.ovf_ResourceAllocationSection.ovf_Info = 'Resource Allocation Section Info'
 
         network = ovf.Network(name='Network Name')
         network.ovf_Description = 'Network Description'
