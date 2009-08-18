@@ -14,8 +14,8 @@ EXCLUDED_PATHS = ['scripts/.*', 'test/.*']
 
 def setup():
     pathManager.addExecPath('XOBJ_PATH')
-    path = pathManager.addExecPath('PYOVF_PATH')
-    print path
+    path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+    pathManager.addExecPath('PYOVF_PATH', path)
     pathManager.addResourcePath('TEST_PATH', path + '/test')
 
 
