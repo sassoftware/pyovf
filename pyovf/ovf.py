@@ -171,6 +171,13 @@ class EulaSection(OvfObject):
     _xobj = xobj.XObjMetadata(
             elements = [ 'ovf_Info', 'ovf_License' ])
 
+class OperatingSystemSection(OvfObject):
+
+    _xobj = xobj.XObjMetadata(
+            attributes = { 'ovf_id' : str, 'ovf_version' : str, 'vmw_osType' : str },
+            elements = [ 'ovf_Info', 
+                         'ovf_Description' ] )
+
 class VirtualSystem(OvfObject):
 
     _xobj = xobj.XObjMetadata(
@@ -178,10 +185,12 @@ class VirtualSystem(OvfObject):
             elements = [ 'ovf_Info', 
                          'ovf_EulaSection',
                          'ovf_ProductSection',
+                         'ovf_OperatingSystemSection',
                          'ovf_VirtualHardwareSection', ] )
 
     ovf_EulaSection = EulaSection
     ovf_ProductSection = ProductSection
+    ovf_OperatingSystemSection = OperatingSystemSection
     ovf_VirtualHardwareSection = [ VirtualHardwareSection ] 
 
     def addVirtualHardwareSection(self, vhws):
