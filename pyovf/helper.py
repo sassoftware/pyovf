@@ -12,6 +12,7 @@ class OvfDocument(xobj.Document):
                      'rasd' : 'http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_ResourceAllocationSettingData',
                      'vssd' : 'http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_VirtualSystemSettingData',
                      'cim' : 'http://schemas.dmtf.org/wbem/wscim/1/common',
+                     'vmw': 'http://www.vmware.com/schema/ovf',
                    }
     schemaFile = os.path.join(os.path.dirname(__file__),
                               "schemas/ovf-envelope.xsd")
