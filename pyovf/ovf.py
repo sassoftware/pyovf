@@ -15,9 +15,8 @@
 # limitations under the License.
 #
 
-
-from lxml import etree
 from xobj import xobj
+
 
 class AbstractOvfObject(object):
     prefix = ''
