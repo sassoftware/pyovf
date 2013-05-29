@@ -1,14 +1,19 @@
 #
-# Copyright (c) rPath, Inc.
+# Copyright (c) SAS Institute Inc.
 #
-# This program is distributed under the terms of the MIT License as found 
-# in a file called LICENSE. If it is not present, the license
-# is always available at http://www.opensource.org/licenses/mit-license.php.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
-# This program is distributed in the hope that it will be useful, but
-# without any waranty; without even the implied warranty of merchantability
-# or fitness for a particular purpose. See the MIT License for full details.
+#     http://www.apache.org/licenses/LICENSE-2.0
 #
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
 
 from StringIO import StringIO
 
@@ -19,7 +24,8 @@ from testrunner import testhelp
 from pyovf import ovf
 from pyovf import helper
 from pyovf import item
-from pyovftestxml import *
+from . import pyovftestxml
+
 
 class TestCase(testhelp.TestCase):
     pass
@@ -100,14 +106,14 @@ class PyOvfTest(TestCase):
         xml = self.ovf.toxml()
         if self.debug:
             self.writeXml('newXml', xml)
-        self.assertEquals(xml, newXml)
-       
+        self.assertEquals(xml, pyovftestxml.newXml)
+
     def testAddFileReference(self):
         self.addFileReference(self.fileId)
         xml = self.ovf.toxml()
         if self.debug:
             self.writeXml('fileXml', xml)
-        self.assertEquals(xml, fileXml)
+        self.assertEquals(xml, pyovftestxml.fileXml)
 
     def testAddDiskWithFormat(self):
         file = self.addFileReference(self.fileId)
@@ -117,7 +123,7 @@ class PyOvfTest(TestCase):
         xml = self.ovf.toxml()
         if self.debug:
             self.writeXml('diskWithFormatXml', xml)
-        self.assertEquals(xml, diskWithFormatXml)
+        self.assertEquals(xml, pyovftestxml.diskWithFormatXml)
 
         file2 = ovf.FileReference()
         file2.ovf_id = 'testFileId2'
@@ -127,7 +133,7 @@ class PyOvfTest(TestCase):
         xml = self.ovf.toxml()
         if self.debug:
             self.writeXml('diskWithFormatXml2', xml)
-        self.assertEquals(xml, diskWithFormatXml2)
+        self.assertEquals(xml, pyovftestxml.diskWithFormatXml2)
 
     def testAddDiskWithCompressedFormat(self):
         file = self.addFileReference(self.fileId)
@@ -137,7 +143,7 @@ class PyOvfTest(TestCase):
         xml = self.ovf.toxml()
         if self.debug:
             self.writeXml('diskWithCompressedFormatXml', xml)
-        self.assertEquals(xml, diskWithCompressedFormatXml)
+        self.assertEquals(xml, pyovftestxml.diskWithCompressedFormatXml)
 
     def testAbstractDiskFormat(self):
         class FakeDiskFormat(ovf.AbstractDiskFormat):
@@ -147,7 +153,7 @@ class PyOvfTest(TestCase):
         self.assertEquals(str(fdf),
             'http://example.com/format.html#compressed')
 
-        fdf = FakeDiskFormat(compressed=False)            
+        fdf = FakeDiskFormat(compressed=False)
         self.assertEquals(str(fdf),
             'http://example.com/format.html')
 
@@ -157,19 +163,19 @@ class PyOvfTest(TestCase):
         xml = self.ovf.toxml()
         if self.debug:
             self.writeXml('systemPropertyXml', xml)
-        self.assertEquals(xml, systemPropertyXml)
-        
+        self.assertEquals(xml, pyovftestxml.systemPropertyXml)
+
     def testAddNetwork(self):
         n = self.addNetwork()
         xml = self.ovf.toxml()
         if self.debug:
             self.writeXml('networkXml', xml)
-        self.assertEquals(xml, networkXml)
+        self.assertEquals(xml, pyovftestxml.networkXml)
 
     def testOvfFile(self):
         if self.debug:
-            self.write('ovfFileXml', ovfFileXml)
-        s = StringIO(ovfFileXml)
+            self.write('ovfFileXml', pyovftestxml.ovfFileXml)
+        s = StringIO(pyovftestxml.ovfFileXml)
         ovfObj = helper.OvfFile(s)
         self.assertEquals(ovfObj.DiskSection.Info,
             self.diskSectionInfo)
@@ -228,4 +234,4 @@ class PyOvfTest(TestCase):
 
         if self.debug:
             self.writeXml('newXml2', xml)
-        self.assertEquals(xml, newXml2)
+        self.assertEquals(xml, pyovftestxml.newXml2)
