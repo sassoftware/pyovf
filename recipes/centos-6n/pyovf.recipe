@@ -25,6 +25,8 @@ class PyOvf(TestPackageRecipe):
         'xobj:python',
         ]
 
+    testDir = '.'
+
     def setupSource(r):
         r.addMercurialSnapshot()
         r.Make()

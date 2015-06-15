@@ -1,9 +1,0 @@
-(^|/)CVS($|/)
-(^|/)\.hg($|/)
-.*\.pyc$
-.*\.swp$
-.*\,cover$
-.*\.coverage$
-.*\.failed$
-.*\.times$
-.*\~$

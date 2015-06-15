@@ -15,7 +15,7 @@
 #
 
 
-SUBDIRS = pyovf test
+SUBDIRS = pyovf pyovf_test
 
 
 build: default-build
@@ -24,12 +24,7 @@ install: default-install
 
 clean: default-clean
 
-test: default-test
-
-dist: archive
-
-archive:
-	hg archive --exclude .hgignore -t tbz2 pyovf-`hg id -i`.tar.bz2
+test: default-test testutils-test
 
 export TOPDIR=$(shell pwd)
 include $(TOPDIR)/Make.rules

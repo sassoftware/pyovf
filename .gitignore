@@ -1,0 +1,7 @@
+*.pyc
+*.swp
+*,cover
+.coverage
+.failed
+.times
+*~

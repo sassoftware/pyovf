@@ -16,9 +16,6 @@
 
 
 from StringIO import StringIO
-
-import testsuite
-testsuite.setup()
 from testrunner import testhelp
 
 from pyovf import ovf

@@ -1,3 +1,4 @@
+#!/usr/bin/python
 #
 # Copyright (c) SAS Institute Inc.
 #
@@ -15,25 +16,17 @@
 #
 
 
-loadSuperClass('testpackage=testbits.rb.rpath.com@rpl:1')
-class PyOvf(TestPackageRecipe):
-    name = 'pyovf'
-    version = '0.1'
+import sys
+from testrunner import suite
 
-    buildRequires = [
-        'make:runtime',
-        'util-linux:runtime',
-        'xobj:python',
-        ]
 
-    codeDirs = {'pyovf': 'pyovf'}
+class Suite(suite.TestSuite):
+    testsuite_module = sys.modules[__name__]
 
-    def setup(r):
-        r.addMercurialSnapshot()
-        r.Make()
+    def getCoverageDirs(self, handler, environ):
+        import pyovf
+        return [pyovf]
 
-        # Install the python module
-        r.MakeInstall()
 
-        if Flags.test:
-            r.test()
+if __name__ == '__main__':
+    Suite().run()
