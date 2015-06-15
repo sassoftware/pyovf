@@ -15,7 +15,7 @@
 #
 
 
-SUBDIRS = pyovf pyovf_test
+SUBDIRS = pyovf
 
 
 build: default-build
